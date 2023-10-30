@@ -40,6 +40,9 @@ dependencies:
     version: 6.16.0(react-dom@18.2.0)(react@18.2.0)
 
 devDependencies:
+  '@faker-js/faker':
+    specifier: ^8.2.0
+    version: 8.2.0
   '@jedmao/redux-mock-store':
     specifier: 3.0.5
     version: 3.0.5(redux@4.2.1)
@@ -53,8 +56,8 @@ devDependencies:
     specifier: 14.5.1
     version: 14.5.1(@testing-library/dom@9.3.3)
   '@types/faker':
-    specifier: 5.5.9
-    version: 5.5.9
+    specifier: 6.6.6
+    version: 6.6.6
   '@types/leaflet':
     specifier: 1.9.3
     version: 1.9.3
@@ -95,8 +98,8 @@ devDependencies:
     specifier: 0.4.3
     version: 0.4.3(eslint@8.51.0)
   faker:
-    specifier: 5.5.3
-    version: 5.5.3
+    specifier: 6.6.6
+    version: 6.6.6
   jsdom:
     specifier: 22.1.0
     version: 22.1.0
@@ -586,6 +589,11 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
+  /@faker-js/faker@8.2.0:
+    resolution: {integrity: sha512-VacmzZqVxdWdf9y64lDOMZNDMM/FQdtM9IsaOPKOm2suYwEatb8VkdHqOzXcDnZbk7YDE2BmsJmy/2Hmkn563g==}
+    engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0, npm: '>=6.14.13'}
+    dev: true
+
   /@humanwhocodes/config-array@0.11.11:
     resolution: {integrity: sha512-N2brEuAadi0CcdeMXUkhbZB84eskAc8MEX1By6qEchoVywSgXPIjou4rYsl0V3Hj0ZnuGycGCjdNgockbzeWNA==}
     engines: {node: '>=10.10.0'}
@@ -833,8 +841,10 @@ packages:
     resolution: {integrity: sha512-/k+vesl92vMvMygmQrFe9Aimxi6oQXFUX9mA5HanTrKUSAMoLauSi6PNFOdRw0oeqilaW600GNx2vSaT2f8aIQ==}
     dev: true
 
-  /@types/faker@5.5.9:
-    resolution: {integrity: sha512-uCx6mP3UY5SIO14XlspxsGjgaemrxpssJI0Ol+GfhxtcKpv9pgRZYsS4eeKeHVLje6Qtc8lGszuBI461+gVZBA==}
+  /@types/faker@6.6.6:
+    resolution: {integrity: sha512-4U2kbpZ75kW5KTw9ZFyB8wfvBUFCmvdxyfgO5K88le7qg1zuK484bwAMul8IIs6uxyzdDo1rWK+Aw4C2GS2n6g==}
+    dependencies:
+      faker: 6.6.6
     dev: true
 
   /@types/geojson@7946.0.11:
@@ -1996,8 +2006,8 @@ packages:
       jest-util: 29.7.0
     dev: true
 
-  /faker@5.5.3:
-    resolution: {integrity: sha512-wLTv2a28wjUyWkbnX7u/ABZBkUkIF2fCd73V6P2oFqEGEktDfzWx4UxrSqtPRw0xPRAcjeAOIiJWqZm3pP4u3g==}
+  /faker@6.6.6:
+    resolution: {integrity: sha512-9tCqYEDHI5RYFQigXFwF1hnCwcWCOJl/hmll0lr5D2Ljjb0o4wphb69wikeJDz5qCEzXCoPvG6ss5SDP6IfOdg==}
     dev: true
 
   /fast-deep-equal@3.1.3:
