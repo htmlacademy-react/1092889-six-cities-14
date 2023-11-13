@@ -1,5 +1,4 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import {Link} from 'react-router-dom';
 
 export const LoginScreen = () => (
   <main className="page__main page__main--login">
@@ -27,10 +26,10 @@ export const LoginScreen = () => (
               required
             />
           </div>
-          <Link to={"/main"}>
-          <button className="login__submit form__submit button" type="submit">
+          <Link to={'/main'}>
+            <button className="login__submit form__submit button" type="submit">
             Sign in
-          </button>
+            </button>
           </Link>
         </form>
       </section>
