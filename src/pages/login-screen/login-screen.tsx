@@ -1,3 +1,5 @@
+import {Link} from 'react-router-dom';
+
 export const LoginScreen = () => (
   <main className="page__main page__main--login">
     <div className="page__login-container container">
@@ -24,9 +26,11 @@ export const LoginScreen = () => (
               required
             />
           </div>
-          <button className="login__submit form__submit button" type="submit">
+          <Link to={'/main'}>
+            <button className="login__submit form__submit button" type="submit">
             Sign in
-          </button>
+            </button>
+          </Link>
         </form>
       </section>
       <section className="locations locations--login locations--current">

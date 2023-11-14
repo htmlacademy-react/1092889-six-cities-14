@@ -1,10 +1,11 @@
+
 export const OfferScreen = () => (
   <main className="page__main page__main--offer">
     <section className="offer">
       <div className="offer__gallery-container container">
         <div className="offer__gallery">
           <div className="offer__image-wrapper">
-            <img className="offer__image" src="img/room.jpg" alt="Photo studio" />
+            <img className="offer__image" src="img/room.jpg" alt="Photo studio"/>
           </div>
           <div className="offer__image-wrapper">
             <img
@@ -54,14 +55,14 @@ export const OfferScreen = () => (
             </h1>
             <button className="offer__bookmark-button button" type="button">
               <svg className="offer__bookmark-icon" width={31} height={33}>
-                <use xlinkHref="#icon-bookmark" />
+                <use xlinkHref="#icon-bookmark"/>
               </svg>
               <span className="visually-hidden">To bookmarks</span>
             </button>
           </div>
           <div className="offer__rating rating">
             <div className="offer__stars rating__stars">
-              <span style={{ width: '80%' }} />
+              <span style={{width: '80%'}}/>
               <span className="visually-hidden">Rating</span>
             </div>
             <span className="offer__rating-value rating__value">4.8</span>
@@ -143,7 +144,7 @@ export const OfferScreen = () => (
                 <div className="reviews__info">
                   <div className="reviews__rating rating">
                     <div className="reviews__stars rating__stars">
-                      <span style={{ width: '80%' }} />
+                      <span style={{width: '80%'}}/>
                       <span className="visually-hidden">Rating</span>
                     </div>
                   </div>
@@ -176,7 +177,7 @@ export const OfferScreen = () => (
                   title="perfect"
                 >
                   <svg className="form__star-image" width={37} height={33}>
-                    <use xlinkHref="#icon-star" />
+                    <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
                 <input
@@ -192,7 +193,7 @@ export const OfferScreen = () => (
                   title="good"
                 >
                   <svg className="form__star-image" width={37} height={33}>
-                    <use xlinkHref="#icon-star" />
+                    <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
                 <input
@@ -208,7 +209,7 @@ export const OfferScreen = () => (
                   title="not bad"
                 >
                   <svg className="form__star-image" width={37} height={33}>
-                    <use xlinkHref="#icon-star" />
+                    <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
                 <input
@@ -224,7 +225,7 @@ export const OfferScreen = () => (
                   title="badly"
                 >
                   <svg className="form__star-image" width={37} height={33}>
-                    <use xlinkHref="#icon-star" />
+                    <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
                 <input
@@ -240,7 +241,7 @@ export const OfferScreen = () => (
                   title="terribly"
                 >
                   <svg className="form__star-image" width={37} height={33}>
-                    <use xlinkHref="#icon-star" />
+                    <use xlinkHref="#icon-star"/>
                   </svg>
                 </label>
               </div>
@@ -270,7 +271,7 @@ export const OfferScreen = () => (
           </section>
         </div>
       </div>
-      <section className="offer__map map" />
+      <section className="offer__map map"/>
     </section>
     <div className="container">
       <section className="near-places places">
@@ -303,14 +304,14 @@ export const OfferScreen = () => (
                     width={18}
                     height={19}
                   >
-                    <use xlinkHref="#icon-bookmark" />
+                    <use xlinkHref="#icon-bookmark"/>
                   </svg>
                   <span className="visually-hidden">In bookmarks</span>
                 </button>
               </div>
               <div className="place-card__rating rating">
                 <div className="place-card__stars rating__stars">
-                  <span style={{ width: '80%' }} />
+                  <span style={{width: '80%'}}/>
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>
@@ -347,14 +348,14 @@ export const OfferScreen = () => (
                     width={18}
                     height={19}
                   >
-                    <use xlinkHref="#icon-bookmark" />
+                    <use xlinkHref="#icon-bookmark"/>
                   </svg>
                   <span className="visually-hidden">To bookmarks</span>
                 </button>
               </div>
               <div className="place-card__rating rating">
                 <div className="place-card__stars rating__stars">
-                  <span style={{ width: '80%' }} />
+                  <span style={{width: '80%'}}/>
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>
@@ -394,14 +395,14 @@ export const OfferScreen = () => (
                     width={18}
                     height={19}
                   >
-                    <use xlinkHref="#icon-bookmark" />
+                    <use xlinkHref="#icon-bookmark"/>
                   </svg>
                   <span className="visually-hidden">To bookmarks</span>
                 </button>
               </div>
               <div className="place-card__rating rating">
                 <div className="place-card__stars rating__stars">
-                  <span style={{ width: '100%' }} />
+                  <span style={{width: '100%'}}/>
                   <span className="visually-hidden">Rating</span>
                 </div>
               </div>

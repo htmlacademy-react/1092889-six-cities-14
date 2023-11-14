@@ -1,5 +1,5 @@
 import {Offer} from '../../contracts/contaracts.ts';
-import {Card} from '../../components/card/Card.tsx';
+import {Card} from '../../components/card/card.tsx';
 
 
 interface MainScreenProps {

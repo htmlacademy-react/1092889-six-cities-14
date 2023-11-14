@@ -1,5 +1,6 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
+import {Link} from 'react-router-dom';
 
 type CardProps = Pick<Offer,
   'isPremium'
@@ -14,7 +15,7 @@ export const Card = (props: CardProps) => (
   <article className="cities__card place-card">
     {props.isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
     <div className="cities__image-wrapper place-card__image-wrapper">
-      <a href={props.id.toString()}>
+      <Link to={`/offer/${props.id.toString()}`}>
         <img
           className="place-card__image"
           src={props.previewImage}
@@ -22,7 +23,7 @@ export const Card = (props: CardProps) => (
           height={200}
           alt={props.title}
         />
-      </a>
+      </Link>
     </div>
     <div className="place-card__info">
       <div className="place-card__price-wrapper">
@@ -47,7 +48,7 @@ export const Card = (props: CardProps) => (
         </div>
       </div>
       <h2 className="place-card__name">
-        <a href={props.id.toString()}>{props.title}</a>
+        <Link to={`/offer/${props.id.toString()}`}>{props.title}</Link>
       </h2>
       <p className="place-card__type">{props.type}</p>
     </div>

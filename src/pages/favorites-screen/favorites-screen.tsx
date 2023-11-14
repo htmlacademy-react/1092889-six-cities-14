@@ -1,5 +1,5 @@
 import React from 'react';
-export const favoritesScreen = () => (
+export const FavoritesScreen = () => (
   <React.Fragment>
     <main className="page__main page__main--favorites">
       <div className="page__favorites-container container">
