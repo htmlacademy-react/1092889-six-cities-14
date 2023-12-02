@@ -1,12 +1,11 @@
-import {Navigate} from 'react-router-dom';
+import {Navigate, Outlet} from 'react-router-dom';
+import {AppRoutes} from '../../constants/constants.ts';
 
-interface AuthorizationRouteProps {
-  children: JSX.Element;
-}
-export const AuthorizedRoute = ({children}: AuthorizationRouteProps) => {
-  const isAuthorized = false;
 
-  return (isAuthorized ? children : <Navigate to={'/'} />);
+export const AuthorizedRoute = () => {
+  const isAuthorized = window.localStorage.getItem('authorization') === 'true' ?? false;
+
+  return (isAuthorized ? <Outlet /> : <Navigate to={AppRoutes.LoginPage} />);
 
 };
 

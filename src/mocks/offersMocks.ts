@@ -1,27 +1,23 @@
-import {City, Host, LocationInfo, Offer} from '../contracts/contaracts.ts';
+import {City, User, LocationInfo, Offer, DetailedOffer, Comment} from '../contracts/contaracts.ts';
 import {faker} from '@faker-js/faker';
+import {Cities, OfferTypes} from '../constants/constants.ts';
 const mockLocation = (): LocationInfo => ({
   latitude: faker.location.latitude(),
   longitude:faker.location.longitude(),
   zoom: faker.number.int(16)});
 
 const mockCity = (): City => ({
-  name: faker.location.city(),
+  name: faker.helpers.arrayElement(Cities),
   location: mockLocation()
 });
 
-const mockHost = (): Host => ({
-  id: faker.number.int(100),
+const mockUser = (): User => ({
   isPro: faker.datatype.boolean(),
   name: faker.person.firstName(),
-  avatarUrl: faker.internet.url()
+  avatarUrl: faker.image.urlLoremFlickr({category:'person'})
 });
 
-const initId = () => {
-  let id = 0;
-  return () => id++;
-};
-const mockOffer = (id: number): Offer => {
+const mockOffer = (id: string): DetailedOffer & Pick<Offer, 'previewImage'> => {
   const city = mockCity();
   return ({
     city: city,
@@ -31,20 +27,27 @@ const mockOffer = (id: number): Offer => {
     isFavorite: faker.datatype.boolean(),
     isPremium: faker.datatype.boolean(),
     rating: faker.number.float({min: 0, max: 5, precision: 0.01}),
-    type: faker.location.secondaryAddress(),
+    type: faker.helpers.arrayElement(OfferTypes),
     bedrooms: faker.number.int(3),
     maxAdults: faker.number.int(6),
     price: faker.number.int(1000),
     goods: Array.from({length: faker.number.int(15)}, () => faker.commerce.productName()),
-    host: mockHost(),
+    host: mockUser(),
     description: faker.word.words(5),
     location: city.location,
     id: id,
   });
 };
 
-export const getOffersMocks = (amount: number) => {
-  const getNextId = initId();
-  return Array.from({length: amount}, () => mockOffer(getNextId()));
-};
+const mockComment = (): Comment => ({
+  id: crypto.randomUUID(),
+  comment: faker.lorem.words({min: 1, max: 10}),
+  date: faker.date.anytime().toISOString(),
+  user: mockUser(),
+  rating: faker.number.int({min: 1,max: 5})
+});
 
+const getOffersMocks = (amount: number) => Array.from({length: amount}, () => mockOffer(crypto.randomUUID()));
+const getComments = () => Array.from({length: faker.number.int({min: 1, max: 10})}, () => mockComment());
+
+export {getOffersMocks, getComments};
