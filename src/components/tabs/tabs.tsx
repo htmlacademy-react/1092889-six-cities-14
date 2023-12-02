@@ -7,8 +7,8 @@ export const Tabs = () => (
     <section className="locations container">
       <ul className="locations__list tabs__list">
         {Cities.map((city) => (
-          <li className="locations__item" key={city}>
-            <NavLink to={`/${city}`} className={({isActive}) =>
+          <li className="locations__item" key={city.name}>
+            <NavLink to={`/${city.name}`} className={({isActive}) =>
               clsx(
                 'locations__item-link',
                 {
@@ -16,7 +16,7 @@ export const Tabs = () => (
                 },
                 'tabs__item')}
             >
-              <span>{city}</span>
+              <span>{city.name}</span>
             </NavLink>
           </li>
         ))}

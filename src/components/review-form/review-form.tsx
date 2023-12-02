@@ -58,7 +58,7 @@ const ReviewForm = () => {
         id="review"
         name="review"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        defaultValue={''}
+        defaultValue={comment.text}
         onChange={handleInputChange}
       />
       <div className="reviews__button-wrapper">

@@ -1,5 +1,3 @@
-import {useLocation} from 'react-router-dom';
-
 import {HeaderNavigation} from './navigation.tsx';
 
 
@@ -18,7 +16,7 @@ export const Header = () => (
             />
           </a>
         </div>
-        {(useLocation().pathname === '/login') ? '' : (<HeaderNavigation />)}
+        <HeaderNavigation />
       </div>
     </div>
   </header>);

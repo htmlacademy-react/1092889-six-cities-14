@@ -14,13 +14,13 @@ const comments = getComments();
 const router = createBrowserRouter([{
   element: <Layout />,
   children:[{
-    element: <Navigate to={`/${Cities[0]}`}/>,
+    element: <Navigate to={`/${Cities[0].name}`}/>,
     index: true,
   },
   ...Cities.map((city) => ({
-    element: <MainPage city={city}/>,
-    path: `/${city}`,
-    loader:() => MainPageLoader([...offers], city)
+    element: <MainPage city={city} />,
+    path: `/${city.name}`,
+    loader: () => MainPageLoader([...offers], city.name),
   })),
   {
     path: AppRoutes.OfferPage,
