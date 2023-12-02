@@ -1,40 +1,49 @@
-import {Fragment} from 'react';
-import {Header} from '../header/header.tsx';
-import {MainScreen} from '../../pages/main-screen/main-screen.tsx';
-import {getOffersMocks} from '../../mocks/offersMocks.ts';
-import {BrowserRouter, Link, Route, Routes} from 'react-router-dom';
+import {loader as MainPageLoader, MainPage} from '../../pages/main-page/main-page.tsx';
+import {getComments, getOffersMocks} from '../../mocks/offersMocks.ts';
+import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {LoginScreen} from '../../pages/login-screen/login-screen.tsx';
-import {OfferScreen} from '../../pages/offer-screen/offer-screen.tsx';
-import {FavoritesScreen} from '../../pages/favorites-screen/favorites-screen.tsx';
+import {loader as OfferPageLoader, OfferPage} from '../../pages/offer-page/offer-Page.tsx';
+import {FavoritesPage, loader as FavoritePageLoader} from '../../pages/favorites-page/favorites-page.tsx';
 import {AuthorizedRoute} from '../authorization/authorized-route.tsx';
+import {AppRoutes, Cities} from '../../constants/constants.ts';
+import {Layout} from '../layout/layout.tsx';
+
+const offers = getOffersMocks(40);
+const comments = getComments();
+
+const router = createBrowserRouter([{
+  element: <Layout />,
+  children:[{
+    element: <Navigate to={`/${Cities[0]}`}/>,
+    index: true,
+  },
+  ...Cities.map((city) => ({
+    element: <MainPage city={city}/>,
+    path: `/${city}`,
+    loader:() => MainPageLoader([...offers], city)
+  })),
+  {
+    path: AppRoutes.OfferPage,
+    element: <OfferPage />,
+    loader: ({params}) => OfferPageLoader([...offers], comments, params)
+  },
+  {
+    element: <AuthorizedRoute />,
+    children: [{
+      path: AppRoutes.FavoritesPage,
+      element: <FavoritesPage />,
+      loader: () => FavoritePageLoader([...offers])
+    }]
+  },
+  {
+    element: <LoginScreen />,
+    path: AppRoutes.LoginPage,
+  }]},{
+  path: '*',
+  element: <LoginScreen />,
+}
+]);
 
 export const App = () => (
-  <BrowserRouter>
-    <Header/>
-    <Routes>
-      <Route path={'/login'} element={<LoginScreen/>}/>
-      <Route path={'/'} element={
-        <MainScreen cards={getOffersMocks(15)}/>
-      }
-      />
-      <Route path={'/offer/:id'} element={<OfferScreen/>}/>
-      <Route path={'/favorites'} element={
-        <AuthorizedRoute>
-          <FavoritesScreen/>
-        </AuthorizedRoute>
-      }
-      />
-      <Route path="*" element={
-        <Fragment>
-          <h1>
-            404.
-            <br />
-            <small>Page not found</small>
-          </h1>
-          <Link to="/">Go to main page</Link>
-        </Fragment>
-      }
-      />
-    </Routes>
-  </BrowserRouter>
+  <RouterProvider router={router}/>
 );

@@ -9,31 +9,41 @@ type City = {
   location: LocationInfo;
 }
 
-type Host = {
-  id:number;
+type User = {
   name:string;
   isPro:boolean;
   avatarUrl:string;
 }
 
 type Offer = {
-  id: number;
-  city: City;
-  previewImage: string;
-  images: string[];
+  id: string;
   title: string;
+  type: string;
+  price: number;
+  city: City;
+  location: LocationInfo;
   isFavorite: boolean;
   isPremium: boolean;
   rating: number;
-  type: string;
-  bedrooms: number;
-  maxAdults: number;
-  price: number;
-  goods: string[];
-  host:Host;
-  description: string;
-  location: LocationInfo;
-};
+  previewImage: string;
+}
 
-export type {Host, LocationInfo, Offer, City};
+type DetailedOffer = Omit<Offer, 'previewImage'> & {
+  description: string;
+  bedrooms: number;
+  goods: string[];
+  host: User;
+  images: string[];
+  maxAdults: number;
+}
+
+type Comment = {
+  id: string;
+  date: string;
+  user: User;
+  comment: string;
+  rating: number;
+}
+
+export type {User, LocationInfo, Offer, City, DetailedOffer, Comment};
 
