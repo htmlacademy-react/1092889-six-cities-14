@@ -11,7 +11,8 @@ import {store} from '../../store/store.ts';
 import {Offer} from '../../contracts/contaracts.ts';
 
 export const App = () => {
-  const {offers, comments} = useSyncExternalStore(store.subscribe, store.getState);
+  const {subscribe, getState} = store;
+  const {offers, comments} = useSyncExternalStore(subscribe, getState);
   const router = createBrowserRouter([{
     element: <Layout/>,
     children: [{

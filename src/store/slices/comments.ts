@@ -2,11 +2,11 @@ import {getComments} from '../../mocks/offersMocks.ts';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Comment} from '../../contracts/contaracts.ts';
 
-interface CommentsStore {
+interface CommentsState {
   comments: Comment[];
 }
 
-const initialState: CommentsStore = {
+const initialState: CommentsState = {
   comments: getComments(),
 };
 
@@ -23,3 +23,5 @@ const commentsSlice = createSlice({
 export const commentsReducer = commentsSlice.reducer;
 export const commentsActions = commentsSlice.actions;
 export {commentsSlice};
+
+export type {CommentsState};

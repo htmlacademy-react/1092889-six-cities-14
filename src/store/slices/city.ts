@@ -26,3 +26,4 @@ const citySlice = createSlice({
 export const cityReducer = citySlice.reducer;
 export const cityActions = citySlice.actions;
 export {citySlice};
+export type {CityState};

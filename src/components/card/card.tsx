@@ -1,7 +1,7 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
 import {Link} from 'react-router-dom';
-import {CardTypeValues} from "../../constants/constants.ts";
+import {CardTypeValues} from '../../constants/constants.ts';
 
 type CardType = 'City' | 'Near-Places' | 'Favorites'
 

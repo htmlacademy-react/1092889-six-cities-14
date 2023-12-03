@@ -24,3 +24,4 @@ const offersSlice = createSlice({
 export const offersReducer = offersSlice.reducer;
 export const offersActions = offersSlice.actions;
 export {offersSlice};
+export type {OffersState};
