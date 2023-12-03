@@ -45,6 +45,6 @@ const mockComment = (): Comment => ({
 });
 
 const getOffersMocks = (amount: number) => Array.from({length: amount}, () => mockOffer(crypto.randomUUID()));
-const getComments = () => Array.from({length: faker.number.int({min: 1, max: 10})}, () => mockComment());
+const getComments = (): Comment[] => Array.from({length: faker.number.int({min: 2, max: 10})}, () => mockComment());
 
 export {getOffersMocks, getComments};

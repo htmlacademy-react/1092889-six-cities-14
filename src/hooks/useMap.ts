@@ -4,18 +4,28 @@ import {City} from '../contracts/contaracts.ts';
 import {MAP_LAYER_URL, OPENSOURCE_ATTRIBUTION} from '../constants/constants.ts';
 
 
-function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City): Map | null {
+function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City, interactive: boolean): Map | null {
   const [map, setMap] = useState<Map | null>(null);
   const isRenderedRef = useRef<boolean>(false);
+
+
   useEffect(() => {
+
+    const mapOptions = {
+      center: {
+        lat: city.location.latitude,
+        lng: city.location.longitude
+      },
+      zoom: city.location.zoom,
+      dragging: interactive,
+      keyboard: interactive,
+      zoomControl: interactive,
+      attributionControl: interactive,
+      scrollWheelZoom: interactive
+    };
+
     if (mapRef.current !== null && !isRenderedRef.current) {
-      const instance = new Map(mapRef.current, {
-        center: {
-          lat: city.location.latitude,
-          lng: city.location.longitude
-        },
-        zoom: city.location.zoom
-      });
+      const instance = new Map(mapRef.current, mapOptions);
 
       const layer = new TileLayer(
         MAP_LAYER_URL,

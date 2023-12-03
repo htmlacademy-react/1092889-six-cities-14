@@ -4,14 +4,14 @@ import {Tabs} from '../../components/tabs/tabs.tsx';
 import {useLoaderData} from 'react-router-dom';
 import {useEffect, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
-
+import {MAP_TYPE_CLASS} from '../../constants/constants.ts';
+import {isPlural} from '../../utils/intl.ts';
 interface MainPageProps {
   city: City;
 }
 const MainPage = ({city}: MainPageProps) => {
   const offers = useLoaderData() as Offer[];
   const [selectedCard, setSelectedCard] = useState('');
-
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
@@ -29,7 +29,7 @@ const MainPage = ({city}: MainPageProps) => {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in {city.name}</b>
+              <b className="places__found">{`${offers.length} ${isPlural(offers.length) ? 'places' : 'place'} to stay in ${city.name}`}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -61,7 +61,7 @@ const MainPage = ({city}: MainPageProps) => {
               </div>
             </section>
             <div className="cities__right-section">
-              <Map city={city} offers={offers} selectedOffer={selectedCard} />
+              <Map city={city} offers={offers} type={MAP_TYPE_CLASS.CITY} selectedOffer={selectedCard} />
             </div>
           </div>
         </div>

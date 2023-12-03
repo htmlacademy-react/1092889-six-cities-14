@@ -1,6 +1,7 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
 import {Link} from 'react-router-dom';
+import {CardTypeValues} from "../../constants/constants.ts";
 
 type CardType = 'City' | 'Near-Places' | 'Favorites'
 
@@ -20,28 +21,6 @@ type CardProps = Pick<Offer,
 | 'rating'
 | 'type'> & SelectHandler & CardPropsType
 
-const CardTypeValues = new Map([
-  ['City', {
-    articleClass: 'cities__card',
-    imageClass: 'cities__image-wrapper',
-    width: 260,
-    height: 200,
-    cardInfo: ''}],
-  ['Near-Places', {
-    articleClass: 'near-places__card',
-    imageClass: 'near-places__image-wrapper',
-    width: 260,
-    height: 200,
-    cardInfo: ''
-  }],
-  ['Favorites', {
-    articleClass: 'favorites__card',
-    imageClass: 'favorites__image-wrapper',
-    width: 150,
-    height: 110,
-    cardInfo: 'favorites__card-info'
-  }]
-]);
 export const Card = (props: CardProps) => {
   const typeValues = CardTypeValues.get(props.cardType);
   const handleMouseEnter = () => {

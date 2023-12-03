@@ -4,8 +4,8 @@ import {Fragment} from 'react';
 
 const Layout = () => (
   <Fragment>
-    {(useLocation().pathname === '/login') ? '' : (<Header />)}
-    <Outlet />
+    {(useLocation().pathname === '/login') ? '' : (<Header/>)}
+    <Outlet/>
   </Fragment>
 );
 

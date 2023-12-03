@@ -78,6 +78,11 @@ const OfferTypes = [
   'hotel'
 ];
 
+const enum MAP_TYPE_CLASS {
+  CITY = 'cities__map',
+  OFFER = 'offer__map'
+}
+
 const enum AppRoutes {
   MainPage = '/',
   LoginPage = '/login',
@@ -85,6 +90,29 @@ const enum AppRoutes {
   OfferPage = '/offer/:id',
   ErrorPage = '/error'
 }
+
+const CardTypeValues = new Map([
+  ['City', {
+    articleClass: 'cities__card',
+    imageClass: 'cities__image-wrapper',
+    width: 260,
+    height: 200,
+    cardInfo: ''}],
+  ['Near-Places', {
+    articleClass: 'near-places__card',
+    imageClass: 'near-places__image-wrapper',
+    width: 260,
+    height: 200,
+    cardInfo: ''
+  }],
+  ['Favorites', {
+    articleClass: 'favorites__card',
+    imageClass: 'favorites__image-wrapper',
+    width: 150,
+    height: 110,
+    cardInfo: 'favorites__card-info'
+  }]
+]);
 
 export {
   AuthorizationStatus,
@@ -97,4 +125,6 @@ export {
   MARKER_URL_ACTIVE,
   OPENSOURCE_ATTRIBUTION,
   DEFAULT_ICON,
-  ACTIVE_ICON};
+  ACTIVE_ICON,
+  MAP_TYPE_CLASS,
+  CardTypeValues};
