@@ -1,20 +1,22 @@
-import {Offer} from '../../contracts/contaracts.ts';
+import {City, Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
 import {useLoaderData} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-
+import {Map} from '../../components/map/map.tsx';
+import {MAP_TYPE_CLASS} from '../../constants/constants.ts';
+import {isPlural} from '../../utils/intl.ts';
 interface MainPageProps {
-  city: string;
+  city: City;
 }
-const MainPage = (props: MainPageProps) => {
+const MainPage = ({city}: MainPageProps) => {
   const offers = useLoaderData() as Offer[];
-  const [, setSelectedCard] = useState('');
+  const [selectedCard, setSelectedCard] = useState('');
   useEffect(() => {
-    if (document.title !== props.city) {
-      document.title = props.city;
+    if (document.title !== city.name) {
+      document.title = city.name;
     }
-  });
+  },[city]);
   const handleSelectedCard = (id: string) => {
     setSelectedCard(id);
   };
@@ -27,7 +29,7 @@ const MainPage = (props: MainPageProps) => {
           <div className="cities__places-container container">
             <section className="cities__places places">
               <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{offers.length} places to stay in {props.city}</b>
+              <b className="places__found">{`${offers.length} ${isPlural(offers.length) ? 'places' : 'place'} to stay in ${city.name}`}</b>
               <form className="places__sorting" action="#" method="get">
                 <span className="places__sorting-caption">Sort by</span>
                 <span className="places__sorting-type" tabIndex={0}>
@@ -59,7 +61,7 @@ const MainPage = (props: MainPageProps) => {
               </div>
             </section>
             <div className="cities__right-section">
-              <section className="cities__map map"/>
+              <Map city={city} offers={offers} type={MAP_TYPE_CLASS.CITY} selectedOffer={selectedCard} />
             </div>
           </div>
         </div>
@@ -68,6 +70,6 @@ const MainPage = (props: MainPageProps) => {
   );
 };
 
-const loader = (offers: Offer[], city: string): Offer[] => offers.filter((el: Offer) => el.city.name === city);
+const loader = (offers: Offer[], city: string): Offer[] => offers.filter((offer: Offer) => offer.city.name === city);
 export {loader, MainPage};
 

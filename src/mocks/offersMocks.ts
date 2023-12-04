@@ -1,15 +1,12 @@
 import {City, User, LocationInfo, Offer, DetailedOffer, Comment} from '../contracts/contaracts.ts';
 import {faker} from '@faker-js/faker';
 import {Cities, OfferTypes} from '../constants/constants.ts';
-const mockLocation = (): LocationInfo => ({
-  latitude: faker.location.latitude(),
-  longitude:faker.location.longitude(),
-  zoom: faker.number.int(16)});
+const mockLocation = (location: LocationInfo): LocationInfo => ({
+  latitude: faker.number.float({min: location.latitude - 0.05, max: location.latitude + 0.05, precision: 0.01}),
+  longitude:faker.number.float({min: location.longitude - 0.05, max: location.longitude + 0.05, precision: 0.01}),
+  zoom: 12});
 
-const mockCity = (): City => ({
-  name: faker.helpers.arrayElement(Cities),
-  location: mockLocation()
-});
+const mockCity = (): City => (faker.helpers.arrayElement(Cities));
 
 const mockUser = (): User => ({
   isPro: faker.datatype.boolean(),
@@ -34,7 +31,7 @@ const mockOffer = (id: string): DetailedOffer & Pick<Offer, 'previewImage'> => {
     goods: Array.from({length: faker.number.int(15)}, () => faker.commerce.productName()),
     host: mockUser(),
     description: faker.word.words(5),
-    location: city.location,
+    location: mockLocation(city.location),
     id: id,
   });
 };
@@ -48,6 +45,6 @@ const mockComment = (): Comment => ({
 });
 
 const getOffersMocks = (amount: number) => Array.from({length: amount}, () => mockOffer(crypto.randomUUID()));
-const getComments = () => Array.from({length: faker.number.int({min: 1, max: 10})}, () => mockComment());
+const getComments = (): Comment[] => Array.from({length: faker.number.int({min: 2, max: 10})}, () => mockComment());
 
 export {getOffersMocks, getComments};
