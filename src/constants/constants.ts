@@ -1,5 +1,5 @@
 import {Icon} from 'leaflet';
-import {City} from '../contracts/contaracts.ts';
+import {City, Offer} from '../contracts/contaracts.ts';
 
 const enum AuthorizationStatus {
   Authorized = 1,
@@ -114,6 +114,33 @@ const CardTypeValues = new Map([
   }]
 ]);
 
+const enum CITY_SORT_TYPE {
+  POPULAR = 'popular',
+  TOP = 'top',
+  HIGH_TO_LOW = 'high to low',
+  LOW_TO_HIGH = 'low to high'
+}
+
+const CitySorts = new Map([
+  [CITY_SORT_TYPE.POPULAR,{
+    name: 'Popular',
+    sortFn: () => 1,
+  }],
+  [CITY_SORT_TYPE.TOP, {
+    name: 'Top rated first',
+    sortFn: (a: Offer,b: Offer) => b.rating - a.rating
+  }],
+  [CITY_SORT_TYPE.HIGH_TO_LOW, {
+    name: 'Price: high to low',
+    sortFn: (a: Offer,b: Offer) => b.price - a.price
+  }],
+  [CITY_SORT_TYPE.LOW_TO_HIGH, {
+    name: 'Price: low to high',
+    sortFn: (a: Offer,b: Offer) => a.price - b.price
+  }]
+]
+);
+
 export {
   AuthorizationStatus,
   Cities,
@@ -127,4 +154,6 @@ export {
   DEFAULT_ICON,
   ACTIVE_ICON,
   MAP_TYPE_CLASS,
-  CardTypeValues};
+  CardTypeValues,
+  CITY_SORT_TYPE,
+  CitySorts};
