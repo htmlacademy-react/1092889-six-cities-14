@@ -1,4 +1,3 @@
-import {getComments} from '../../mocks/offersMocks.ts';
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Comment} from '../../contracts/contaracts.ts';
 
@@ -7,7 +6,7 @@ interface CommentsState {
 }
 
 const initialState: CommentsState = {
-  comments: getComments(),
+  comments: [],
 };
 
 const commentsSlice = createSlice({
