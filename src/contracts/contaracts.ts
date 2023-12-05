@@ -51,5 +51,19 @@ type LoginCredentials = {
   password: string;
 }
 
-export type {User, LocationInfo, Offer, City, DetailedOffer, Comment, LoginCredentials};
+type CommentData = {
+  comment: string;
+  rating: number;
+}
+
+export type {
+  User,
+  LocationInfo,
+  Offer,
+  City,
+  DetailedOffer,
+  Comment,
+  LoginCredentials,
+  CommentData
+};
 

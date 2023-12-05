@@ -155,6 +155,16 @@ const CitySorts = new Map([
 ]
 );
 
+const ServerRoutes = {
+  login: '/login',
+  logout: '/logout',
+  offers: '/offers',
+  offer: '/offers/',
+  nearByOffers: '/nearby',
+  favorite: '/favorite',
+  comments: '/comments/',
+};
+
 export {
   AuthorizationStatus,
   Cities,
@@ -172,4 +182,5 @@ export {
   CITY_SORT_TYPE,
   CitySorts,
   REQUEST_STATUS,
-  EMPTY_USER};
+  EMPTY_USER,
+  ServerRoutes};

@@ -6,11 +6,11 @@ import {Map} from '../../components/map/map.tsx';
 import {CITY_SORT_TYPE, CitySorts, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {CardSort} from '../../components/card-sort/card-sort.tsx';
-import {fetchAllOffers} from '../../store/slices/offers.ts';
+import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
-import {useSyncStore} from '../../hooks/useSyncStore.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 interface MainPageProps {
   city: City;
@@ -18,10 +18,11 @@ interface MainPageProps {
 
 const MainPage = ({city}: MainPageProps) => {
   const [sortType, setSortType] = useState(CITY_SORT_TYPE.POPULAR);
-  const {offers} = useSyncStore().offers;
+  const offers = useAppSelector((state) => state.offers.offers);
+  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
   const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? [...filteredOffers] : [...filteredOffers].sort(CitySorts.get(sortType)!.sortFn);
-  const [selectedCard, setSelectedCard] = useState('');
+  const selectedCard = selectedOffer?.id;
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
@@ -29,8 +30,10 @@ const MainPage = ({city}: MainPageProps) => {
     setSortType(CITY_SORT_TYPE.POPULAR);
   },[city]);
 
-  const handleSelectedCard = (id: string) => {
-    setSelectedCard(id);
+  const handleSelectedCard = (id: string | null) => {
+    if (selectedCard !== id && id !== null){
+      store.dispatch(fetchOffer(id));
+    }
   };
 
   const handleSortChange = (type: CITY_SORT_TYPE) => {
@@ -46,7 +49,7 @@ const MainPage = ({city}: MainPageProps) => {
           {(currentOffers.length === 0 && store.getState().offers.requestStatus !== REQUEST_STATUS.PENDING) ? <EmptyMain city={city.name} /> :
             <div className="cities__places-container container">
               <section className="cities__places places">
-                {(store.getState().offers.requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> :
+                {(currentOffers.length === 0) ? <Spinner /> :
                   <Fragment>
                     <h2 className="visually-hidden">Places</h2>
                     <b className="places__found">{`${currentOffers.length} ${isPlural(currentOffers.length) ? 'places' : 'place'} to stay in ${city.name}`}</b>
@@ -57,7 +60,7 @@ const MainPage = ({city}: MainPageProps) => {
                   </Fragment>}
               </section>
               <div className="cities__right-section">
-                <Map city={city} offers={currentOffers} type={MAP_TYPE_CLASS.CITY} selectedOffer={selectedCard} />
+                <Map city={city} offers={currentOffers} type={MAP_TYPE_CLASS.CITY} />
               </div>
             </div>}
         </div>
@@ -67,7 +70,8 @@ const MainPage = ({city}: MainPageProps) => {
 };
 
 const loader = () => {
-  if(store.getState().offers.requestStatus === REQUEST_STATUS.IDLE) {
+  const {offers} = store.getState();
+  if(offers.requestStatus === REQUEST_STATUS.IDLE || (offers.requestStatus === REQUEST_STATUS.FULFILLED && offers.offers.length === 0)) {
     store.dispatch(fetchAllOffers());
   }
   return null;

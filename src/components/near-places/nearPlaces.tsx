@@ -3,7 +3,7 @@ import {Card} from '../card/card.tsx';
 
 interface NearPlacesProps {
   nearOffers: Offer[];
-  onSelectHandler: (id: Offer['id']) => void;
+  onSelectHandler: (id: Offer['id'] | null) => void;
 }
 const NearPlaces = (props: NearPlacesProps) => {
   const nearOffers = props.nearOffers;

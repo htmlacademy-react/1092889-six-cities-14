@@ -2,10 +2,12 @@ import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
 import {Link} from 'react-router-dom';
 import {CardTypeValues} from '../../constants/constants.ts';
+import {useActionCreators} from '../../hooks/store.ts';
+import {offersActions} from '../../store/slices/offers.ts';
 
 type CardType = 'City' | 'Near-Places' | 'Favorites'
 
-type SelectHandler = {onSelect: (id: string) => void}
+type SelectHandler = {onSelect: (id: string | null) => void}
 
 interface CardPropsType {
   cardType: CardType;
@@ -23,12 +25,17 @@ type CardProps = Pick<Offer,
 
 export const Card = (props: CardProps) => {
   const typeValues = CardTypeValues.get(props.cardType);
+  const {removeSelectedOffer} = useActionCreators(offersActions);
   const handleMouseEnter = () => {
     props.onSelect(props.id);
   };
   const handleMouseLeave = () => {
-    props.onSelect('');
+    if (props.cardType === 'City') {
+      removeSelectedOffer();
+    }
+    props.onSelect(null);
   };
+
   return (
     <article className={`${typeValues!.articleClass} place-card`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {props.isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
