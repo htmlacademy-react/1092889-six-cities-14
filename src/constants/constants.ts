@@ -7,6 +7,20 @@ const enum AuthorizationStatus {
   Unknown = 0
 }
 
+const EMPTY_USER = {
+  name: 'user',
+  isPro: false,
+  avatarUrl: '',
+  token: ''
+};
+
+const enum REQUEST_STATUS {
+  IDLE = 0,
+  PENDING = 1,
+  REJECTED = 2,
+  FULFILLED = 3
+}
+
 const DEFAULT_TITLE = '6 cities';
 
 const MAP_LAYER_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png';
@@ -156,4 +170,6 @@ export {
   MAP_TYPE_CLASS,
   CardTypeValues,
   CITY_SORT_TYPE,
-  CitySorts};
+  CitySorts,
+  REQUEST_STATUS,
+  EMPTY_USER};

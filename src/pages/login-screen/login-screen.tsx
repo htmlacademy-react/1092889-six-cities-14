@@ -1,11 +1,25 @@
-import {Link} from 'react-router-dom';
 import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
+import {store} from '../../store/store.ts';
+import {login} from '../../store/slices/authentication.ts';
+import {FormEvent, useSyncExternalStore} from 'react';
+import {AuthorizationStatus} from '../../constants/constants.ts';
+import {Navigate} from 'react-router-dom';
+import {LoginCredentials} from '../../contracts/contaracts.ts';
+
 
 export const LoginScreen = () => {
+  const {authentication} = useSyncExternalStore(store.subscribe,store.getState);
   useDocumentTitle('Login');
-  const handleLogin = () => window.localStorage.setItem('authorization', 'true');
+  const handleLogin = (evt: FormEvent) => {
+    evt.preventDefault();
+    const target = evt.target as HTMLFormElement;
+    const data = new FormData(target);
+    const credentials = Object.fromEntries(data.entries()) as LoginCredentials;
+    store.dispatch(login(credentials));
+  };
   return (
     <div className="page page--gray page--login">
+      {(authentication.status === AuthorizationStatus.Authorized) ? <Navigate to={'/'} /> : ''}
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
@@ -27,7 +41,7 @@ export const LoginScreen = () => {
         <div className="page__login-container container">
           <section className="login">
             <h1 className="login__title">Sign in</h1>
-            <form className="login__form form" action="#" method="post">
+            <form className="login__form form" action="login" method="post" onSubmit={handleLogin}>
               <div className="login__input-wrapper form__input-wrapper">
                 <label className="visually-hidden">E-mail</label>
                 <input
@@ -48,11 +62,9 @@ export const LoginScreen = () => {
                   required
                 />
               </div>
-              <Link to={'/'}>
-                <button className="login__submit form__submit button" type="submit" onClick={handleLogin}>
+              <button className="login__submit form__submit button" type="submit">
                 Sign in
-                </button>
-              </Link>
+              </button>
             </form>
           </section>
           <section className="locations locations--login locations--current">

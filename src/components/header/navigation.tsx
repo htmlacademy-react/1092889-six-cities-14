@@ -1,14 +1,19 @@
-import {AppRoutes} from '../../constants/constants.ts';
+import {AppRoutes, AuthorizationStatus} from '../../constants/constants.ts';
 import {NavLink} from 'react-router-dom';
+import {useSyncExternalStore} from 'react';
+import {store} from '../../store/store.ts';
+import {logout} from '../../store/slices/authentication.ts';
+import {dropToken} from '../../api/token.ts';
 
 
 const HeaderNavigation = () => {
+  const {authentication} = useSyncExternalStore(store.subscribe,store.getState);
   const handleSignOut = () => {
-    window.localStorage.removeItem('authorization');
-
+    dropToken();
+    store.dispatch(logout());
   };
   return (
-    (window.localStorage.getItem('authorization') === 'true') ? (
+    (authentication.status === AuthorizationStatus.Authorized) ? (
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item user">
@@ -17,7 +22,7 @@ const HeaderNavigation = () => {
             >
               <div className="header__avatar-wrapper user__avatar-wrapper"></div>
               <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
+                {authentication.user.name}
               </span>
               <span className="header__favorite-count">3</span>
             </NavLink>
