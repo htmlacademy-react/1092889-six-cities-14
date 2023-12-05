@@ -1,14 +1,15 @@
 import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
 import {store} from '../../store/store.ts';
 import {login} from '../../store/slices/authentication.ts';
-import {FormEvent, useSyncExternalStore} from 'react';
+import {FormEvent} from 'react';
 import {AuthorizationStatus} from '../../constants/constants.ts';
 import {Navigate} from 'react-router-dom';
 import {LoginCredentials} from '../../contracts/contaracts.ts';
+import {useSyncStore} from '../../hooks/useSyncStore.ts';
 
 
 export const LoginScreen = () => {
-  const {authentication} = useSyncExternalStore(store.subscribe,store.getState);
+  const {authentication} = useSyncStore();
   useDocumentTitle('Login');
   const handleLogin = (evt: FormEvent) => {
     evt.preventDefault();

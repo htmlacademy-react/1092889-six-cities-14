@@ -50,7 +50,7 @@ const createAPI = (): AxiosInstance => {
 
         detailMessage.details.map((detail) => {
           const message = `${ detail.property} -  ${detail.messages.join(' ')}`;
-          (toast(message,{
+          (toast.warn(message,{
             position: 'top-right',
             autoClose: 5000,
             hideProgressBar: false,

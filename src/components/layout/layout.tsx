@@ -1,6 +1,6 @@
 import {Header} from '../header/header.tsx';
 import {Outlet, useLocation} from 'react-router-dom';
-import React, {Fragment} from 'react';
+import {Fragment} from 'react';
 import {getToken} from '../../api/token.ts';
 import {store} from '../../store/store.ts';
 import {checkAuth} from '../../store/slices/authentication.ts';

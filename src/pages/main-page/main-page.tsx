@@ -1,7 +1,7 @@
 import {City, Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
-import {Fragment, useEffect, useState, useSyncExternalStore} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
 import {CITY_SORT_TYPE, CitySorts, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
@@ -10,13 +10,15 @@ import {fetchAllOffers} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
+import {useSyncStore} from '../../hooks/useSyncStore.ts';
 
 interface MainPageProps {
   city: City;
 }
+
 const MainPage = ({city}: MainPageProps) => {
   const [sortType, setSortType] = useState(CITY_SORT_TYPE.POPULAR);
-  const {offers} = useSyncExternalStore(store.subscribe,store.getState).offers;
+  const {offers} = useSyncStore().offers;
   const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
   const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? [...filteredOffers] : [...filteredOffers].sort(CitySorts.get(sortType)!.sortFn);
   const [selectedCard, setSelectedCard] = useState('');

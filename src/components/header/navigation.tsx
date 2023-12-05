@@ -1,13 +1,13 @@
 import {AppRoutes, AuthorizationStatus} from '../../constants/constants.ts';
 import {NavLink} from 'react-router-dom';
-import {useSyncExternalStore} from 'react';
 import {store} from '../../store/store.ts';
 import {logout} from '../../store/slices/authentication.ts';
 import {dropToken} from '../../api/token.ts';
+import {useSyncStore} from '../../hooks/useSyncStore.ts';
 
 
 const HeaderNavigation = () => {
-  const {authentication} = useSyncExternalStore(store.subscribe,store.getState);
+  const {authentication} = useSyncStore();
   const handleSignOut = () => {
     dropToken();
     store.dispatch(logout());
