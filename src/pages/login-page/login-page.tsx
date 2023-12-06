@@ -2,14 +2,14 @@ import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
 import {store} from '../../store/store.ts';
 import {login} from '../../store/slices/authentication.ts';
 import {FormEvent} from 'react';
-import {AuthorizationStatus} from '../../constants/constants.ts';
+import {AUTHORIZATION_STATUS} from '../../constants/constants.ts';
 import {Navigate} from 'react-router-dom';
 import {LoginCredentials} from '../../contracts/contaracts.ts';
-import {useSyncStore} from '../../hooks/useSyncStore.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 
 export const LoginPage = () => {
-  const {authentication} = useSyncStore();
+  const authStatus = useAppSelector((state) => state.authentication.status);
   useDocumentTitle('Login');
   const handleLogin = (evt: FormEvent) => {
     evt.preventDefault();
@@ -20,7 +20,7 @@ export const LoginPage = () => {
   };
   return (
     <div className="page page--gray page--login">
-      {(authentication.status === AuthorizationStatus.Authorized) ? <Navigate to={'/'} /> : ''}
+      {(authStatus === AUTHORIZATION_STATUS.AUTHORIZED) ? <Navigate to={'/'} /> : ''}
       <header className="header">
         <div className="container">
           <div className="header__wrapper">

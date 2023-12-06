@@ -59,7 +59,6 @@ const commentsSlice = createSlice({
 });
 
 export const commentsReducer = commentsSlice.reducer;
-export const commentsActions = commentsSlice.actions;
 export {commentsSlice, fetchComments, sendComment};
 
 export type {CommentsState};

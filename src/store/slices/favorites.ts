@@ -1,5 +1,5 @@
 import {Offer} from '../../contracts/contaracts.ts';
-import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ThunkApi} from '../store-types.ts';
 import {
   FAVORITE_STATUS,
@@ -36,11 +36,7 @@ const changeFavoriteStatus = createAsyncThunk<Offer, {offerId: Offer['id']; stat
 const favoritesSlice = createSlice({
   name: 'favorites',
   initialState,
-  reducers: {
-    addFavorites(state, action:PayloadAction<Offer[] | []>) {
-      state.favorites = action.payload;
-    }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(fetchFavorites.fulfilled, (state, action) => {
       state.favorites = action.payload;
@@ -80,7 +76,6 @@ const favoritesSlice = createSlice({
 });
 
 export const favoritesReducers = favoritesSlice.reducer;
-export const favoritesActions = favoritesSlice.actions;
 
 export {favoritesSlice, fetchFavorites, changeFavoriteStatus};
 export type {FavoritesState};

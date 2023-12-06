@@ -12,9 +12,9 @@ type GroupedOffers = {[k:string]: Offer[]}
 const FavoritesPage = () => {
   useDocumentTitle('Favorites');
   const offers = useAppSelector((state) => state.favorites.favorites);
-  const groupedOffers = Array.from(Object.entries(offers.reduce((arr: GroupedOffers , curr: Offer) => {
-    (arr[curr.city['name']] = arr[curr.city['name']] || []).push(curr);
-    return arr;
+  const groupedOffers = Array.from(Object.entries(offers.reduce((array: GroupedOffers , current: Offer) => {
+    (array[current.city['name']] = array[current.city['name']] || []).push(current);
+    return array;
   }, {})));
   const selectedCard = useAppSelector((state) => state.offers.selectedOffer);
   const handleSelectedCard = (id: string | null) => {

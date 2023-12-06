@@ -1,10 +1,11 @@
 import {Icon} from 'leaflet';
 import {City, Offer} from '../contracts/contaracts.ts';
 
-const enum AuthorizationStatus {
-  Authorized = 1,
-  Unauthorized = 2,
-  Unknown = 0
+const PLACEHOLDER_NUMBER = 0;
+const enum AUTHORIZATION_STATUS {
+  AUTHORIZED = 1,
+  UNAUTHORIZED = 2,
+  UNKNOWN = 0
 }
 
 const enum FAVORITE_STATUS {
@@ -26,8 +27,6 @@ const enum REQUEST_STATUS {
   FULFILLED = 3
 }
 
-const DEFAULT_TITLE = '6 cities';
-
 const MAP_LAYER_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png';
 const MARKER_URL = './img/pin.svg';
 const MARKER_URL_ACTIVE = './img/pin-active.svg';
@@ -46,7 +45,7 @@ const ACTIVE_ICON = new Icon({
 });
 
 
-const Cities: City[] = [{
+const CITIES: City[] = [{
   name: 'Paris',
   location: {
     latitude: 48.85661,
@@ -92,24 +91,15 @@ const Cities: City[] = [{
   }
 },];
 
-const OfferTypes = [
-  'apartment',
-  'room',
-  'house',
-  'hotel'
-];
-
 const enum MAP_TYPE_CLASS {
   CITY = 'cities__map',
   OFFER = 'offer__map'
 }
 
-const enum AppRoutes {
-  MainPage = '/',
-  LoginPage = '/login',
-  FavoritesPage = '/favorites',
-  OfferPage = '/offer/:id',
-  ErrorPage = '/error'
+const enum APP_ROUTES {
+  LOGIN = '/login',
+  FAVORITES = '/favorites',
+  OFFER = '/offer/:id',
 }
 
 const CardTypeValues = new Map([
@@ -142,10 +132,10 @@ const enum CITY_SORT_TYPE {
   LOW_TO_HIGH = 'low to high'
 }
 
-const CitySorts = new Map([
+const CITY_SORTS = new Map([
   [CITY_SORT_TYPE.POPULAR,{
     name: 'Popular',
-    sortFn: () => 1,
+    sortFn: () => PLACEHOLDER_NUMBER,
   }],
   [CITY_SORT_TYPE.TOP, {
     name: 'Top rated first',
@@ -173,11 +163,9 @@ const ServerRoutes = {
 };
 
 export {
-  AuthorizationStatus,
-  Cities,
-  OfferTypes,
-  AppRoutes,
-  DEFAULT_TITLE,
+  AUTHORIZATION_STATUS,
+  CITIES,
+  APP_ROUTES,
   MAP_LAYER_URL,
   MARKER_URL,
   MARKER_URL_ACTIVE,
@@ -187,7 +175,7 @@ export {
   MAP_TYPE_CLASS,
   CardTypeValues,
   CITY_SORT_TYPE,
-  CitySorts,
+  CITY_SORTS,
   REQUEST_STATUS,
   EMPTY_USER,
   ServerRoutes,

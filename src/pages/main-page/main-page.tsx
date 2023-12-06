@@ -3,7 +3,7 @@ import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
 import {Fragment, useEffect, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
-import {CITY_SORT_TYPE, CitySorts, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
+import {CITY_SORT_TYPE, CITY_SORTS, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {CardSort} from '../../components/card-sort/card-sort.tsx';
 import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
@@ -21,7 +21,7 @@ const MainPage = ({city}: MainPageProps) => {
   const offers = useAppSelector((state) => state.offers.offers);
   const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
-  const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? [...filteredOffers] : [...filteredOffers].sort(CitySorts.get(sortType)!.sortFn);
+  const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? filteredOffers : filteredOffers.sort(CITY_SORTS.get(sortType)!.sortFn);
   const selectedCard = selectedOffer?.id;
 
   useEffect(() => {

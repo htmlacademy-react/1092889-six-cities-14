@@ -3,7 +3,7 @@ import {ReviewForm} from '../review-form/review-form.tsx';
 import {Comment} from '../../contracts/contaracts.ts';
 import {formatDate, isPlural} from '../../utils/intl.ts';
 import {useAppSelector} from '../../hooks/store.ts';
-import {AuthorizationStatus} from '../../constants/constants.ts';
+import {AUTHORIZATION_STATUS} from '../../constants/constants.ts';
 
 interface ReviewsListProps {
   comments: Comment[];
@@ -17,7 +17,7 @@ const ReviewsList = ({comments}: ReviewsListProps) => {
         {isPlural(comments.length) ? 'Reviews' : 'Review'} · <span className="reviews__amount">{comments.length}</span>
       </h2>
       <ul className="reviews__list">
-        {comments.map((comment: Comment) => (
+        {comments.toReversed().slice(0,10).map((comment: Comment) => (
           <li className="reviews__item" key={comment.id}>
             <div className="reviews__user user">
               <div className="reviews__avatar-wrapper user__avatar-wrapper">
@@ -48,7 +48,7 @@ const ReviewsList = ({comments}: ReviewsListProps) => {
           </li>
         ))}
       </ul>
-      {(auth === AuthorizationStatus.Authorized) ? <ReviewForm/> : '' }
+      {(auth === AUTHORIZATION_STATUS.AUTHORIZED) ? <ReviewForm/> : '' }
     </section>
   );
 };

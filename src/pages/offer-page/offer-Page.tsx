@@ -3,8 +3,8 @@ import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Map} from '../../components/map/map.tsx';
 import {
-  AppRoutes,
-  AuthorizationStatus,
+  APP_ROUTES,
+  AUTHORIZATION_STATUS,
   FAVORITE_STATUS,
   MAP_TYPE_CLASS,
   REQUEST_STATUS
@@ -34,10 +34,10 @@ const OfferPage = () => {
 
   const handleBookmarkButton = () => {
     const statusToChange = (offer!.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
-    if(auth === AuthorizationStatus.Authorized) {
+    if(auth === AUTHORIZATION_STATUS.AUTHORIZED) {
       store.dispatch(changeFavoriteStatus({offerId: offer!.id, status: statusToChange}));
     } else {
-      navigate(AppRoutes.LoginPage);
+      navigate(APP_ROUTES.LOGIN);
     }
   };
   return (
@@ -129,9 +129,9 @@ const OfferPage = () => {
               <Map city={CityInfo} type={MAP_TYPE_CLASS.OFFER} offers={[...nearOffers.slice(0,3), {...offer, previewImage: ''} as Offer]}/>}
           </section>
         )}
-      {(nearOffers.length === 0 || requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> :
+      {(nearOffers.length === 0 && requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> :
         <div className="container">
-          <NearPlaces nearOffers={nearOffers.slice(0,3)} onSelectHandler={() => {}}/>
+          <NearPlaces onSelectHandler={() => {}}/>
         </div>}
 
     </main>

@@ -4,7 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import {City, Offer} from '../../contracts/contaracts.ts';
 import {useMap} from '../../hooks/useMap.ts';
 import {ACTIVE_ICON, DEFAULT_ICON, MAP_TYPE_CLASS} from '../../constants/constants.ts';
-import {useSyncStore} from '../../hooks/useSyncStore.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 type MapProps = {
   city: City;
@@ -17,7 +17,7 @@ function Map(props: MapProps) {
   const interactive = (MAP_TYPE_CLASS.CITY) === props.type;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city, interactive);
-  const {selectedOffer} = useSyncStore().offers;
+  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);

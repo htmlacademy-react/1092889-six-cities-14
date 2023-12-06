@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
-import {AuthorizationStatus, EMPTY_USER, REQUEST_STATUS} from '../../constants/constants.ts';
+import {AUTHORIZATION_STATUS, EMPTY_USER, REQUEST_STATUS} from '../../constants/constants.ts';
 import {LoginCredentials, User} from '../../contracts/contaracts.ts';
 import {ThunkApi} from '../store-types.ts';
 import {saveToken} from '../../api/token.ts';
@@ -30,13 +30,13 @@ const logout = createAsyncThunk<number, undefined, ThunkApi>(
 );
 
 interface AuthenticationState {
-  status: AuthorizationStatus;
+  status: AUTHORIZATION_STATUS;
   user: User;
   requestStatus: REQUEST_STATUS;
 }
 
 const initialState = {
-  status: AuthorizationStatus.Unknown,
+  status: AUTHORIZATION_STATUS.UNKNOWN,
   user: EMPTY_USER,
   requestStatus: REQUEST_STATUS.IDLE
 };
@@ -44,18 +44,17 @@ const initialState = {
 const authenticationSlice = createSlice({
   name: 'authentication',
   initialState,
-  reducers: {
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder.addCase(checkAuth.fulfilled, (state, action) => {
       state.requestStatus = REQUEST_STATUS.FULFILLED;
       state.user = action.payload;
-      state.status = AuthorizationStatus.Authorized;
+      state.status = AUTHORIZATION_STATUS.AUTHORIZED;
     });
     builder.addCase(checkAuth.rejected, (state) => {
       state.requestStatus = REQUEST_STATUS.REJECTED;
       state.user = EMPTY_USER;
-      state.status = AuthorizationStatus.Unauthorized;
+      state.status = AUTHORIZATION_STATUS.UNAUTHORIZED;
     });
     builder.addCase(checkAuth.pending,(state) => {
       state.requestStatus = REQUEST_STATUS.PENDING;
@@ -63,12 +62,12 @@ const authenticationSlice = createSlice({
     builder.addCase(login.fulfilled, (state, action) => {
       state.requestStatus = REQUEST_STATUS.FULFILLED;
       state.user = action.payload;
-      state.status = AuthorizationStatus.Authorized;
+      state.status = AUTHORIZATION_STATUS.AUTHORIZED;
     });
     builder.addCase(login.rejected, (state) => {
       state.requestStatus = REQUEST_STATUS.REJECTED;
       state.user = EMPTY_USER;
-      state.status = AuthorizationStatus.Unauthorized;
+      state.status = AUTHORIZATION_STATUS.UNAUTHORIZED;
     });
     builder.addCase(login.pending,(state) => {
       state.requestStatus = REQUEST_STATUS.PENDING;
@@ -76,23 +75,22 @@ const authenticationSlice = createSlice({
     builder.addCase(logout.fulfilled, (state) => {
       state.requestStatus = REQUEST_STATUS.FULFILLED;
       state.user = EMPTY_USER;
-      state.status = AuthorizationStatus.Unauthorized;
+      state.status = AUTHORIZATION_STATUS.UNAUTHORIZED;
     });
     builder.addCase(logout.rejected, (state) => {
       state.requestStatus = REQUEST_STATUS.REJECTED;
       state.user = EMPTY_USER;
-      state.status = AuthorizationStatus.Unauthorized;
+      state.status = AUTHORIZATION_STATUS.UNAUTHORIZED;
     });
     builder.addCase(logout.pending,(state) => {
       state.requestStatus = REQUEST_STATUS.PENDING;
       state.user = EMPTY_USER;
-      state.status = AuthorizationStatus.Unauthorized;
+      state.status = AUTHORIZATION_STATUS.UNAUTHORIZED;
     });
   }
 });
 
 export const authenticationReducer = authenticationSlice.reducer;
-export const authenticationAction = authenticationSlice.actions;
 
 export {authenticationSlice, checkAuth, logout, login};
 export type {AuthenticationState};
