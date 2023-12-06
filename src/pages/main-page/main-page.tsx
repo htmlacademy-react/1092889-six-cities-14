@@ -1,75 +1,81 @@
 import {City, Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
-import {useLoaderData} from 'react-router-dom';
-import {useEffect, useState} from 'react';
+import {Fragment, useEffect, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
-import {MAP_TYPE_CLASS} from '../../constants/constants.ts';
+import {CITY_SORT_TYPE, CITY_SORTS, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
+import {CardSort} from '../../components/card-sort/card-sort.tsx';
+import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
+import {store} from '../../store/store.ts';
+import {Spinner} from '../../components/spinner/spinner.tsx';
+import {EmptyMain} from '../../components/empty/empty-main.tsx';
+import {useAppSelector} from '../../hooks/store.ts';
+
 interface MainPageProps {
   city: City;
 }
+
 const MainPage = ({city}: MainPageProps) => {
-  const offers = useLoaderData() as Offer[];
-  const [selectedCard, setSelectedCard] = useState('');
+  const [sortType, setSortType] = useState(CITY_SORT_TYPE.POPULAR);
+  const offers = useAppSelector((state) => state.offers.offers);
+  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
+  const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
+  const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? filteredOffers : filteredOffers.sort(CITY_SORTS.get(sortType)!.sortFn);
+  const selectedCard = selectedOffer?.id;
+
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
     }
+    setSortType(CITY_SORT_TYPE.POPULAR);
   },[city]);
-  const handleSelectedCard = (id: string) => {
-    setSelectedCard(id);
+
+  const handleSelectedCard = (id: string | null) => {
+    if (selectedCard !== id && id !== null){
+      store.dispatch(fetchOffer(id));
+    }
   };
+
+  const handleSortChange = (type: CITY_SORT_TYPE) => {
+    setSortType(type);
+  };
+
   return (
     <div className="page page--gray page--main">
-      <main className="page__main page__main--index">
+      <main className={`page__main page__main--index ${(currentOffers.length === 0 && store.getState().offers.requestStatus !== REQUEST_STATUS.PENDING) ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <Tabs/>
         <div className="cities">
-          <div className="cities__places-container container">
-            <section className="cities__places places">
-              <h2 className="visually-hidden">Places</h2>
-              <b className="places__found">{`${offers.length} ${isPlural(offers.length) ? 'places' : 'place'} to stay in ${city.name}`}</b>
-              <form className="places__sorting" action="#" method="get">
-                <span className="places__sorting-caption">Sort by</span>
-                <span className="places__sorting-type" tabIndex={0}>
-                    Popular
-                  <svg className="places__sorting-arrow" width={7} height={4}>
-                    <use xlinkHref="#icon-arrow-select"/>
-                  </svg>
-                </span>
-                <ul className="places__options places__options--custom places__options--opened">
-                  <li
-                    className="places__option places__option--active"
-                    tabIndex={0}
-                  >
-                    Popular
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: low to high
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Price: high to low
-                  </li>
-                  <li className="places__option" tabIndex={0}>
-                    Top rated first
-                  </li>
-                </ul>
-              </form>
-              <div className="cities__places-list places__list tabs__content">
-                {offers.map((el: Offer) => <Card key={el.id} cardType={'City'} onSelect={handleSelectedCard} {...el}/>)}
+          {(currentOffers.length === 0 && store.getState().offers.requestStatus !== REQUEST_STATUS.PENDING) ? <EmptyMain city={city.name} /> :
+            <div className="cities__places-container container">
+              <section className="cities__places places">
+                {(currentOffers.length === 0) ? <Spinner /> :
+                  <Fragment>
+                    <h2 className="visually-hidden">Places</h2>
+                    <b className="places__found">{`${currentOffers.length} ${isPlural(currentOffers.length) ? 'places' : 'place'} to stay in ${city.name}`}</b>
+                    <CardSort currentSort={sortType} onSortChange={handleSortChange}/>
+                    <div className="cities__places-list places__list tabs__content">
+                      {currentOffers.map((el: Offer) => <Card key={el.id} cardType={'City'} onSelect={handleSelectedCard} {...el}/>)}
+                    </div>
+                  </Fragment>}
+              </section>
+              <div className="cities__right-section">
+                <Map city={city} offers={currentOffers} type={MAP_TYPE_CLASS.CITY} />
               </div>
-            </section>
-            <div className="cities__right-section">
-              <Map city={city} offers={offers} type={MAP_TYPE_CLASS.CITY} selectedOffer={selectedCard} />
-            </div>
-          </div>
+            </div>}
         </div>
       </main>
     </div>
   );
 };
 
-const loader = (offers: Offer[], city: string): Offer[] => offers.filter((offer: Offer) => offer.city.name === city);
-export {loader, MainPage};
+const loader = () => {
+  const {offers} = store.getState();
+  if(offers.requestStatus === REQUEST_STATUS.IDLE || (offers.requestStatus === REQUEST_STATUS.FULFILLED && offers.offers.length === 0)) {
+    store.dispatch(fetchAllOffers());
+  }
+  return null;
 
+};
+export {loader, MainPage};

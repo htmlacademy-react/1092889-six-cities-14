@@ -1,6 +1,6 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {City} from '../../contracts/contaracts.ts';
-import {Cities} from '../../constants/constants.ts';
+import {CITIES} from '../../constants/constants.ts';
 
 interface CityState {
   city: City['name'];
@@ -8,8 +8,8 @@ interface CityState {
 }
 
 const initialState: CityState = {
-  city: Cities[0].name,
-  cities: Cities
+  city: CITIES[0].name,
+  cities: CITIES
 };
 
 const citySlice = createSlice({

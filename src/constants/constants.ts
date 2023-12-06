@@ -1,13 +1,32 @@
 import {Icon} from 'leaflet';
-import {City} from '../contracts/contaracts.ts';
+import {City, Offer, User} from '../contracts/contaracts.ts';
 
-const enum AuthorizationStatus {
-  Authorized = 1,
-  Unauthorized = 2,
-  Unknown = 0
+const PLACEHOLDER_NUMBER = 0;
+const enum AUTHORIZATION_STATUS {
+  AUTHORIZED = 1,
+  UNAUTHORIZED = 2,
+  UNKNOWN = 0
 }
 
-const DEFAULT_TITLE = '6 cities';
+const enum FAVORITE_STATUS {
+  FAVORITE = 1,
+  NOT_FAVORITE = 0
+}
+
+const EMPTY_USER: User = {
+  name: 'user',
+  isPro: false,
+  avatarUrl: '',
+  token: '',
+  email: ''
+};
+
+const enum REQUEST_STATUS {
+  IDLE = 0,
+  PENDING = 1,
+  REJECTED = 2,
+  FULFILLED = 3
+}
 
 const MAP_LAYER_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png';
 const MARKER_URL = './img/pin.svg';
@@ -27,7 +46,7 @@ const ACTIVE_ICON = new Icon({
 });
 
 
-const Cities: City[] = [{
+const CITIES: City[] = [{
   name: 'Paris',
   location: {
     latitude: 48.85661,
@@ -42,53 +61,46 @@ const Cities: City[] = [{
     zoom: 13,
   },
 }, {
-  name: 'Dusseldorf',
+  name: 'Brussels',
   location: {
-    latitude: 51.225402,
-    longitude: 6.776314,
+    latitude: 50.846557,
+    longitude: 4.351697,
     zoom: 13
-  },
+  }
 }, {
   name: 'Amsterdam',
   location: {
     latitude: 52.37454,
     longitude: 4.897976,
     zoom: 13
-  },
-}, {
-  name: 'Brussels',
-  location: {
-    latitude: 50.846557,
-    longitude: 4.351697,
-    zoom: 13
-  },
-}, {
+  }
+},
+{
   name: 'Hamburg',
   location: {
     latitude: 53.550341,
     longitude: 10.000654,
     zoom: 13
-  },
-}];
-
-const OfferTypes = [
-  'apartment',
-  'room',
-  'house',
-  'hotel'
-];
+  }
+},
+{
+  name: 'Dusseldorf',
+  location: {
+    latitude: 51.225402,
+    longitude: 6.776314,
+    zoom: 13
+  }
+},];
 
 const enum MAP_TYPE_CLASS {
   CITY = 'cities__map',
   OFFER = 'offer__map'
 }
 
-const enum AppRoutes {
-  MainPage = '/',
-  LoginPage = '/login',
-  FavoritesPage = '/favorites',
-  OfferPage = '/offer/:id',
-  ErrorPage = '/error'
+const enum APP_ROUTES {
+  LOGIN = '/login',
+  FAVORITES = '/favorites',
+  OFFER = '/offer/:id',
 }
 
 const CardTypeValues = new Map([
@@ -114,12 +126,47 @@ const CardTypeValues = new Map([
   }]
 ]);
 
+const enum CITY_SORT_TYPE {
+  POPULAR = 'popular',
+  TOP = 'top',
+  HIGH_TO_LOW = 'high to low',
+  LOW_TO_HIGH = 'low to high'
+}
+
+const CITY_SORTS = new Map([
+  [CITY_SORT_TYPE.POPULAR,{
+    name: 'Popular',
+    sortFn: () => PLACEHOLDER_NUMBER,
+  }],
+  [CITY_SORT_TYPE.LOW_TO_HIGH, {
+    name: 'Price: low to high',
+    sortFn: (a: Offer,b: Offer) => a.price - b.price
+  }],
+  [CITY_SORT_TYPE.HIGH_TO_LOW, {
+    name: 'Price: high to low',
+    sortFn: (a: Offer,b: Offer) => b.price - a.price
+  }],
+  [CITY_SORT_TYPE.TOP, {
+    name: 'Top rated first',
+    sortFn: (a: Offer,b: Offer) => b.rating - a.rating
+  }]
+]
+);
+
+const ServerRoutes = {
+  login: '/login',
+  logout: '/logout',
+  offers: '/offers',
+  offer: '/offers/',
+  nearByOffers: '/nearby',
+  favorite: '/favorite',
+  comments: '/comments/',
+};
+
 export {
-  AuthorizationStatus,
-  Cities,
-  OfferTypes,
-  AppRoutes,
-  DEFAULT_TITLE,
+  AUTHORIZATION_STATUS,
+  CITIES,
+  APP_ROUTES,
   MAP_LAYER_URL,
   MARKER_URL,
   MARKER_URL_ACTIVE,
@@ -127,4 +174,10 @@ export {
   DEFAULT_ICON,
   ACTIVE_ICON,
   MAP_TYPE_CLASS,
-  CardTypeValues};
+  CardTypeValues,
+  CITY_SORT_TYPE,
+  CITY_SORTS,
+  REQUEST_STATUS,
+  EMPTY_USER,
+  ServerRoutes,
+  FAVORITE_STATUS};

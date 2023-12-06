@@ -1,12 +1,18 @@
-import {useState} from 'react';
+import {FormEvent, useState} from 'react';
 import {Fragment} from 'react';
+import {useAppSelector} from '../../hooks/store.ts';
+import {REQUEST_STATUS} from '../../constants/constants.ts';
+import {store} from '../../store/store.ts';
+import {sendComment} from '../../store/slices/comments.ts';
 
 const ReviewForm = () => {
-  const [comment, setRating] = useState({
-    text: '',
+  const [review, setReview] = useState({
+    comment: '',
     rating: 0,
-    isValid: false
   });
+
+  const requestStatus = useAppSelector((state) => state.comments.requestStatus);
+  const selectedOfferId = useAppSelector((state) => state.offers.selectedOffer!.id);
 
   const ratingTable = [
     {id: '5-stars', value: 5, title: 'perfect'},
@@ -15,19 +21,29 @@ const ReviewForm = () => {
     {id: '2-stars', value: 2, title: 'badly'},
     {id: '1-star', value: 1, title: 'terribly'}
   ];
-  const isValid = () => ((comment.rating >= 1 && comment.text.length >= 50));
+  const isValid = () => ((review.rating >= 1 && review.comment.length >= 50 && review.comment.length <= 300));
   const handleRatingChange = (evt : React.ChangeEvent<HTMLInputElement>) => {
-    if (Number(evt.target.value) === comment.rating) {
+    if (Number(evt.target.value) === review.rating) {
       return;
     }
-    setRating({...comment ,rating: Number(evt.target.value), isValid: isValid()});
+    setReview({...review ,rating: Number(evt.target.value)});
   };
   const handleInputChange = (evt : React.ChangeEvent<HTMLTextAreaElement>) => {
-    setRating({...comment, text: evt.target.value, isValid: isValid()});
+    setReview({...review, comment: evt.target.value});
+  };
+
+  const handleFormSubmit = (evt: FormEvent) => {
+    evt.preventDefault();
+    const form = evt.target as HTMLFormElement;
+    form.reset();
+    store.dispatch(sendComment({comment:review, offerId: selectedOfferId}));
+    setReview({
+      comment: '',
+      rating: 0,});
   };
 
   return (
-    <form className="reviews__form form" action="#" method="post">
+    <form className="reviews__form form" action="#" method="post" onSubmit={handleFormSubmit}>
       <label className="reviews__label form__label" htmlFor="review">
         Your review
       </label>
@@ -41,6 +57,8 @@ const ReviewForm = () => {
               id={ratingValue.id}
               type="radio"
               onChange={handleRatingChange}
+              disabled={requestStatus === REQUEST_STATUS.PENDING}
+              checked={ratingValue.value === review.rating}
             />
             <label
               htmlFor={ratingValue.id}
@@ -55,10 +73,10 @@ const ReviewForm = () => {
       </div>
       <textarea
         className="reviews__textarea form__textarea"
-        id="review"
-        name="review"
+        id="comment"
+        name="comment"
         placeholder="Tell how was your stay, what you like and what can be improved"
-        defaultValue={comment.text}
+        defaultValue={review.comment}
         onChange={handleInputChange}
       />
       <div className="reviews__button-wrapper">
@@ -71,7 +89,7 @@ const ReviewForm = () => {
         <button
           className="reviews__submit form__submit button"
           type="submit"
-          disabled={!comment.isValid}
+          disabled={!isValid() || requestStatus === REQUEST_STATUS.PENDING}
         >
           Submit
         </button>

@@ -13,6 +13,8 @@ type User = {
   name:string;
   isPro:boolean;
   avatarUrl:string;
+  token: string;
+  email: string;
 }
 
 type Offer = {
@@ -45,5 +47,24 @@ type Comment = {
   rating: number;
 }
 
-export type {User, LocationInfo, Offer, City, DetailedOffer, Comment};
+type LoginCredentials = {
+  email: string;
+  password: string;
+}
+
+type CommentData = {
+  comment: string;
+  rating: number;
+}
+
+export type {
+  User,
+  LocationInfo,
+  Offer,
+  City,
+  DetailedOffer,
+  Comment,
+  LoginCredentials,
+  CommentData
+};
 

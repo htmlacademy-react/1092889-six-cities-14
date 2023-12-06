@@ -1,11 +1,15 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
-import {Link} from 'react-router-dom';
-import {CardTypeValues} from '../../constants/constants.ts';
+import {Link, useNavigate} from 'react-router-dom';
+import {APP_ROUTES, AUTHORIZATION_STATUS, CardTypeValues, FAVORITE_STATUS} from '../../constants/constants.ts';
+import {useActionCreators, useAppSelector} from '../../hooks/store.ts';
+import {offersActions} from '../../store/slices/offers.ts';
+import {store} from '../../store/store.ts';
+import {changeFavoriteStatus} from '../../store/slices/favorites.ts';
 
 type CardType = 'City' | 'Near-Places' | 'Favorites'
 
-type SelectHandler = {onSelect: (id: string) => void}
+type SelectHandler = {onSelect: (id: string | null) => void}
 
 interface CardPropsType {
   cardType: CardType;
@@ -23,12 +27,28 @@ type CardProps = Pick<Offer,
 
 export const Card = (props: CardProps) => {
   const typeValues = CardTypeValues.get(props.cardType);
+  const {removeSelectedOffer} = useActionCreators(offersActions);
+  const auth = useAppSelector((state) => state.authentication.status);
+  const navigate = useNavigate();
   const handleMouseEnter = () => {
     props.onSelect(props.id);
   };
   const handleMouseLeave = () => {
-    props.onSelect('');
+    if (props.cardType === 'City') {
+      removeSelectedOffer();
+    }
+    props.onSelect(null);
   };
+
+  const handleBookmarkButton = () => {
+    const statusToChange = (props.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
+    if(auth === AUTHORIZATION_STATUS.AUTHORIZED) {
+      store.dispatch(changeFavoriteStatus({offerId: props.id, status: statusToChange}));
+    } else {
+      navigate(APP_ROUTES.LOGIN);
+    }
+  };
+
   return (
     <article className={`${typeValues!.articleClass} place-card`} onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
       {props.isPremium ? <div className="place-card__mark"><span>Premium</span></div> : ''}
@@ -52,6 +72,7 @@ export const Card = (props: CardProps) => {
           <button
             className={`place-card__bookmark button${(props.isFavorite) ? ' place-card__bookmark-button--active' : ''} button`}
             type="button"
+            onClick={handleBookmarkButton}
           >
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark"/>

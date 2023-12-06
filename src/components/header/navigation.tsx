@@ -1,29 +1,35 @@
-import {AppRoutes} from '../../constants/constants.ts';
+import {APP_ROUTES, AUTHORIZATION_STATUS} from '../../constants/constants.ts';
 import {NavLink} from 'react-router-dom';
+import {store} from '../../store/store.ts';
+import {logout} from '../../store/slices/authentication.ts';
+import {dropToken} from '../../api/token.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 
 const HeaderNavigation = () => {
+  const authentication = useAppSelector((state) => state.authentication);
+  const favorites = useAppSelector((state) => state.favorites);
   const handleSignOut = () => {
-    window.localStorage.removeItem('authorization');
-
+    dropToken();
+    store.dispatch(logout());
   };
   return (
-    (window.localStorage.getItem('authorization') === 'true') ? (
+    (authentication.status === AUTHORIZATION_STATUS.AUTHORIZED) ? (
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item user">
-            <NavLink to={AppRoutes.FavoritesPage}
+            <NavLink to={APP_ROUTES.FAVORITES}
               className="header__nav-link header__nav-link--profile"
             >
               <div className="header__avatar-wrapper user__avatar-wrapper"></div>
               <span className="header__user-name user__name">
-                      Oliver.conner@gmail.com
+                {authentication.user.email}
               </span>
-              <span className="header__favorite-count">3</span>
+              <span className="header__favorite-count">{favorites.favorites.length}</span>
             </NavLink>
           </li>
           <li className="header__nav-item">
-            <a className="header__nav-link" href="#" onClick={handleSignOut}>
+            <a className="header__nav-link" onClick={handleSignOut}>
               <span className="header__signout">Sign out</span>
             </a>
           </li>

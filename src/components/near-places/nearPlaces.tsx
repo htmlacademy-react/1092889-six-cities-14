@@ -1,12 +1,13 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../card/card.tsx';
+import {useAppSelector} from '../../hooks/store.ts';
 
 interface NearPlacesProps {
-  nearOffers: Offer[];
-  onSelectHandler: (id: Offer['id']) => void;
+  onSelectHandler: (id: Offer['id'] | null) => void;
 }
 const NearPlaces = (props: NearPlacesProps) => {
-  const nearOffers = props.nearOffers;
+  const nearOffers = useAppSelector((state) => state.offers.nearOffers).slice(0,3);
+
 
   return (
     <section className="near-places places">

@@ -4,20 +4,20 @@ import 'leaflet/dist/leaflet.css';
 import {City, Offer} from '../../contracts/contaracts.ts';
 import {useMap} from '../../hooks/useMap.ts';
 import {ACTIVE_ICON, DEFAULT_ICON, MAP_TYPE_CLASS} from '../../constants/constants.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 type MapProps = {
   city: City;
-  offers: Offer[];
   type: MAP_TYPE_CLASS;
-  selectedOffer: string | undefined;
+  offers: Offer[];
 };
 
 function Map(props: MapProps) {
-  const {city, offers, selectedOffer} = props;
+  const {city, offers} = props;
   const interactive = (MAP_TYPE_CLASS.CITY) === props.type;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city, interactive);
-
+  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
@@ -28,12 +28,11 @@ function Map(props: MapProps) {
         });
 
         marker
-          .setIcon((offer.id === selectedOffer) ? ACTIVE_ICON : DEFAULT_ICON)
+          .setIcon((offer.id === selectedOffer?.id) ? ACTIVE_ICON : DEFAULT_ICON)
           .addTo(markerLayer);
       });
-      if (selectedOffer) {
-        const offer = offers.find((el) => el.id === selectedOffer);
-        map.setView([offer!.location.latitude, offer!.location.longitude]);
+      if (selectedOffer?.id) {
+        map.setView([selectedOffer.location.latitude, selectedOffer.location.longitude]);
       } else if (interactive) {
         map.setView([city.location.latitude,city.location.longitude],city.location.zoom);
       }
@@ -41,7 +40,7 @@ function Map(props: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers, selectedOffer, city]);
+  }, [interactive, map, offers,selectedOffer, city]);
 
   return(
     <section className={`${props.type} map`} ref={mapRef}/>
