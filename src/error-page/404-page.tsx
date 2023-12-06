@@ -29,7 +29,7 @@ const Page404 = () => (
               <p className="cities__status-description">
                 We could not find any page at selected address
               </p>
-              <NavLink className="login__submit form__submit button" to={'/Paris'}>Return Home</NavLink>
+              <NavLink className="login__submit form__submit button" to={'/'}>Return Home</NavLink>
             </div>
           </section>
           <div className="cities__right-section"/>

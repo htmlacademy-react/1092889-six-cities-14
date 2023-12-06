@@ -5,6 +5,7 @@ import {Card} from '../../components/card/card.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 import {store} from '../../store/store.ts';
 import {fetchOffer} from '../../store/slices/offers.ts';
+import {EmptyFavorites} from '../../components/empty/empty-favorites.tsx';
 
 type GroupedOffers = {[k:string]: Offer[]}
 
@@ -25,33 +26,35 @@ const FavoritesPage = () => {
 
   return (
     <React.Fragment>
-      <main className="page__main page__main--favorites">
-        <div className="page__favorites-container container">
-          <section className="favorites">
-            <h1 className="favorites__title">Saved listing</h1>
-            <ul className="favorites__list">
-              {groupedOffers.map((group: [string,Offer[]]) => (
-                <li className="favorites__locations-items" key={group[0]}>
-                  <div className="favorites__locations locations locations--current">
-                    <div className="locations__item">
-                      <a className="locations__item-link" href="#">
-                        <span>{group[0]}</span>
-                      </a>
+      {(offers.length === 0) ? <EmptyFavorites /> : (
+        <main className="page__main page__main--favorites">
+          <div className="page__favorites-container container">
+            <section className="favorites">
+              <h1 className="favorites__title">Saved listing</h1>
+              <ul className="favorites__list">
+                {groupedOffers.map((group: [string,Offer[]]) => (
+                  <li className="favorites__locations-items" key={group[0]}>
+                    <div className="favorites__locations locations locations--current">
+                      <div className="locations__item">
+                        <a className="locations__item-link" href="#">
+                          <span>{group[0]}</span>
+                        </a>
+                      </div>
                     </div>
-                  </div>
-                  <div className="favorites__places">
-                    {group[1].map((offer) => (
-                      <Card key={offer.id}
-                        cardType={'Favorites'}
-                        {...offer}
-                        onSelect={handleSelectedCard}
-                      />))}
-                  </div>
-                </li>))}
-            </ul>
-          </section>
-        </div>
-      </main>
+                    <div className="favorites__places">
+                      {group[1].map((offer) => (
+                        <Card key={offer.id}
+                          cardType={'Favorites'}
+                          {...offer}
+                          onSelect={handleSelectedCard}
+                        />))}
+                    </div>
+                  </li>))}
+              </ul>
+            </section>
+          </div>
+        </main>
+      )}
       <footer className="footer container">
         <a className="footer__logo-link" href="main.html">
           <img

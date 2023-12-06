@@ -32,6 +32,9 @@ const OfferPage = () => {
   const auth = useAppSelector((state) => state.authentication.status);
   const navigate = useNavigate();
 
+  if (requestStatus === REQUEST_STATUS.REJECTED) {
+    navigate('*');
+  }
   const handleBookmarkButton = () => {
     const statusToChange = (offer!.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
     if(auth === AUTHORIZATION_STATUS.AUTHORIZED) {
@@ -104,7 +107,7 @@ const OfferPage = () => {
                 <div className="offer__host">
                   <h2 className="offer__host-title">Meet the host</h2>
                   <div className="offer__host-user user">
-                    <div className="offer__avatar-wrapper offer__avatar-wrapper--pro user__avatar-wrapper">
+                    <div className={clsx('offer__avatar-wrapper', {'offer__avatar-wrapper--pro': offer.host.isPro}, 'user__avatar-wrapper')}>
                       <img
                         className="offer__avatar user__avatar"
                         src={offer.host.avatarUrl}
@@ -114,7 +117,7 @@ const OfferPage = () => {
                       />
                     </div>
                     <span className="offer__user-name">{offer.host.name}</span>
-                    {(offer.host.isPro) ? <span className="offer__user-status">Pro</span> : ''}
+                    {(offer.host.isPro) ? <span className="offer__user-status">Pro</span> : ' '}
                   </div>
                   <div className="offer__description">
                     <p className="offer__text">

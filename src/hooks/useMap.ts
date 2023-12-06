@@ -21,7 +21,9 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City, intera
       keyboard: interactive,
       zoomControl: interactive,
       attributionControl: interactive,
-      scrollWheelZoom: interactive
+      scrollWheelZoom: interactive,
+      doubleClickZoom: interactive,
+      onDoubleClick: interactive
     };
 
     if (mapRef.current !== null && !isRenderedRef.current) {
@@ -40,7 +42,7 @@ function useMap(mapRef: MutableRefObject<HTMLElement | null>, city: City, intera
       setMap(instance);
       isRenderedRef.current = true;
     }
-  }, [mapRef, city]);
+  }, [interactive, mapRef, city]);
 
   return map;
 }

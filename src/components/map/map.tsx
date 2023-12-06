@@ -40,7 +40,7 @@ function Map(props: MapProps) {
         map.removeLayer(markerLayer);
       };
     }
-  }, [map, offers,selectedOffer, city]);
+  }, [interactive, map, offers,selectedOffer, city]);
 
   return(
     <section className={`${props.type} map`} ref={mapRef}/>

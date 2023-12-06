@@ -23,7 +23,7 @@ const HeaderNavigation = () => {
             >
               <div className="header__avatar-wrapper user__avatar-wrapper"></div>
               <span className="header__user-name user__name">
-                {authentication.user.name}
+                {authentication.user.email}
               </span>
               <span className="header__favorite-count">{favorites.favorites.length}</span>
             </NavLink>

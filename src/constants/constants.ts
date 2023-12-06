@@ -1,5 +1,5 @@
 import {Icon} from 'leaflet';
-import {City, Offer} from '../contracts/contaracts.ts';
+import {City, Offer, User} from '../contracts/contaracts.ts';
 
 const PLACEHOLDER_NUMBER = 0;
 const enum AUTHORIZATION_STATUS {
@@ -13,11 +13,12 @@ const enum FAVORITE_STATUS {
   NOT_FAVORITE = 0
 }
 
-const EMPTY_USER = {
+const EMPTY_USER: User = {
   name: 'user',
   isPro: false,
   avatarUrl: '',
-  token: ''
+  token: '',
+  email: ''
 };
 
 const enum REQUEST_STATUS {
@@ -137,17 +138,17 @@ const CITY_SORTS = new Map([
     name: 'Popular',
     sortFn: () => PLACEHOLDER_NUMBER,
   }],
-  [CITY_SORT_TYPE.TOP, {
-    name: 'Top rated first',
-    sortFn: (a: Offer,b: Offer) => b.rating - a.rating
+  [CITY_SORT_TYPE.LOW_TO_HIGH, {
+    name: 'Price: low to high',
+    sortFn: (a: Offer,b: Offer) => a.price - b.price
   }],
   [CITY_SORT_TYPE.HIGH_TO_LOW, {
     name: 'Price: high to low',
     sortFn: (a: Offer,b: Offer) => b.price - a.price
   }],
-  [CITY_SORT_TYPE.LOW_TO_HIGH, {
-    name: 'Price: low to high',
-    sortFn: (a: Offer,b: Offer) => a.price - b.price
+  [CITY_SORT_TYPE.TOP, {
+    name: 'Top rated first',
+    sortFn: (a: Offer,b: Offer) => b.rating - a.rating
   }]
 ]
 );

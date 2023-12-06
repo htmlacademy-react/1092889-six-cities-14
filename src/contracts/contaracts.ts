@@ -14,6 +14,7 @@ type User = {
   isPro:boolean;
   avatarUrl:string;
   token: string;
+  email: string;
 }
 
 type Offer = {

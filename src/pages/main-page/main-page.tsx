@@ -9,7 +9,7 @@ import {CardSort} from '../../components/card-sort/card-sort.tsx';
 import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
-import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
+import {EmptyMain} from '../../components/empty/empty-main.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 
 interface MainPageProps {
