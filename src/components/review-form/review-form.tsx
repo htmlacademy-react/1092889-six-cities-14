@@ -57,6 +57,8 @@ const ReviewForm = () => {
               id={ratingValue.id}
               type="radio"
               onChange={handleRatingChange}
+              disabled={requestStatus === REQUEST_STATUS.PENDING}
+              checked={ratingValue.value === review.rating}
             />
             <label
               htmlFor={ratingValue.id}

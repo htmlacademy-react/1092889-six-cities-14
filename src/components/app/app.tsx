@@ -1,6 +1,6 @@
 import {loader as MainPageLoader, MainPage} from '../../pages/main-page/main-page.tsx';
 import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
-import {LoginScreen} from '../../pages/login-screen/login-screen.tsx';
+import {LoginPage} from '../../pages/login-page/login-page.tsx';
 import {OfferPage, loader as OfferPageLoader} from '../../pages/offer-page/offer-Page.tsx';
 import {FavoritesPage} from '../../pages/favorites-page/favorites-page.tsx';
 import {AuthorizedRoute} from '../authorization/authorized-route.tsx';
@@ -36,7 +36,7 @@ export const App = () => {
       }]
     },
     {
-      element: <LoginScreen/>,
+      element: <LoginPage/>,
       path: AppRoutes.LoginPage,
     }]
   }, {

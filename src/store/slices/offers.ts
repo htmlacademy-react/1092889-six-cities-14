@@ -2,6 +2,7 @@ import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {DetailedOffer, Offer} from '../../contracts/contaracts.ts';
 import {ThunkApi} from '../store-types.ts';
 import {REQUEST_STATUS, ServerRoutes} from '../../constants/constants.ts';
+import {changeFavoriteStatus} from './favorites.ts';
 
 interface OffersState {
   offers: Offer[];
@@ -48,7 +49,7 @@ const offersSlice = createSlice({
   reducers:{
     removeSelectedOffer: (state) => {
       state.selectedOffer = null;
-    }
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllOffers.fulfilled,(state: OffersState, action: PayloadAction<Offer[]>) => {
@@ -82,8 +83,19 @@ const offersSlice = createSlice({
       state.nearOffers = [];
       state.requestStatus = REQUEST_STATUS.PENDING;
     });
+    builder.addCase(changeFavoriteStatus.fulfilled, (state, action) => {
+      const replaceElement = state.offers.find((el) => el.id === action.payload.id)!;
+      if(replaceElement) {
+        replaceElement.isFavorite = action.payload.isFavorite;
+      } else if (state.selectedOffer!.id === action.payload.id){
+        state.selectedOffer!.isFavorite = action.payload.isFavorite;
+      } else {
+        const element = state.nearOffers.find((el) => el.id === action.payload.id)!;
+        element.isFavorite = action.payload.isFavorite;
+      }
+      state.requestStatus = REQUEST_STATUS.FULFILLED;
+    });
   }
-
 });
 
 export const offersReducer = offersSlice.reducer;

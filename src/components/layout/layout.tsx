@@ -6,10 +6,11 @@ import {store} from '../../store/store.ts';
 import {checkAuth} from '../../store/slices/authentication.ts';
 import {ToastContainer} from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import {fetchFavorites} from '../../store/slices/favorites.ts';
 
 const Layout = () => (
   <Fragment>
-    <ToastContainer />
+    <ToastContainer/>
     {(useLocation().pathname === '/login') ? '' : (<Header/>)}
     <Outlet/>
   </Fragment>
@@ -18,6 +19,7 @@ const Layout = () => (
 const loader = () => {
   if(getToken() !== ''){
     store.dispatch(checkAuth());
+    store.dispatch(fetchFavorites());
   }
   return null;
 };

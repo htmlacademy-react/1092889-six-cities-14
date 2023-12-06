@@ -3,11 +3,12 @@ import {NavLink} from 'react-router-dom';
 import {store} from '../../store/store.ts';
 import {logout} from '../../store/slices/authentication.ts';
 import {dropToken} from '../../api/token.ts';
-import {useSyncStore} from '../../hooks/useSyncStore.ts';
+import {useAppSelector} from '../../hooks/store.ts';
 
 
 const HeaderNavigation = () => {
-  const {authentication} = useSyncStore();
+  const authentication = useAppSelector((state) => state.authentication);
+  const favorites = useAppSelector((state) => state.favorites);
   const handleSignOut = () => {
     dropToken();
     store.dispatch(logout());
@@ -24,7 +25,7 @@ const HeaderNavigation = () => {
               <span className="header__user-name user__name">
                 {authentication.user.name}
               </span>
-              <span className="header__favorite-count">3</span>
+              <span className="header__favorite-count">{favorites.favorites.length}</span>
             </NavLink>
           </li>
           <li className="header__nav-item">

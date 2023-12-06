@@ -2,7 +2,13 @@ import {convertRatingToPercent} from '../../utils/converters.ts';
 import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Map} from '../../components/map/map.tsx';
-import {MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
+import {
+  AppRoutes,
+  AuthorizationStatus,
+  FAVORITE_STATUS,
+  MAP_TYPE_CLASS,
+  REQUEST_STATUS
+} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {store} from '../../store/store.ts';
 import {fetchComments} from '../../store/slices/comments.ts';
@@ -11,16 +17,29 @@ import {fetchNearOffers, fetchOffer} from '../../store/slices/offers.ts';
 import {NearPlaces} from '../../components/near-places/nearPlaces.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 import {Offer} from '../../contracts/contaracts.ts';
-import {Params} from 'react-router-dom';
+import {Params, useNavigate} from 'react-router-dom';
+import {changeFavoriteStatus} from '../../store/slices/favorites.ts';
+import clsx from 'clsx';
 
 const OfferPage = () => {
   useDocumentTitle('Offer');
-  const nearOffers = useAppSelector((state) => state.offers.nearOffers).slice(0,3);
+  const nearOffers = useAppSelector((state) => state.offers.nearOffers);
   const offer = useAppSelector((state) => state.offers.selectedOffer);
   const comments = useAppSelector((state) => state.comments.comments);
   const city = useAppSelector((state) => state.city);
   const requestStatus = useAppSelector((state) => state.offers.requestStatus);
   const CityInfo = city.cities.find((el) => el.name === city.city)!;
+  const auth = useAppSelector((state) => state.authentication.status);
+  const navigate = useNavigate();
+
+  const handleBookmarkButton = () => {
+    const statusToChange = (offer!.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
+    if(auth === AuthorizationStatus.Authorized) {
+      store.dispatch(changeFavoriteStatus({offerId: offer!.id, status: statusToChange}));
+    } else {
+      navigate(AppRoutes.LoginPage);
+    }
+  };
   return (
 
     <main className="page__main page__main--offer">
@@ -29,7 +48,7 @@ const OfferPage = () => {
           <section className="offer">
             <div className="offer__gallery-container container">
               <div className="offer__gallery">
-                {offer.images.map((image) => (
+                {offer.images.slice(0,6).map((image) => (
                   <div className="offer__image-wrapper" key={image}>
                     <img className="offer__image"
                       src={image}
@@ -49,7 +68,7 @@ const OfferPage = () => {
                   <h1 className="offer__name">
                     {offer.title}
                   </h1>
-                  <button className="offer__bookmark-button button" type="button">
+                  <button className={clsx('offer__bookmark-button', {'offer__bookmark-button--active' : offer.isFavorite} ,'button')} type="button" onClick={handleBookmarkButton}>
                     <svg className="offer__bookmark-icon" width={31} height={33}>
                       <use xlinkHref="#icon-bookmark"/>
                     </svg>
@@ -107,19 +126,19 @@ const OfferPage = () => {
               </div>
             </div>
             {(nearOffers.length === 0) ? <Spinner /> :
-              <Map city={CityInfo} type={MAP_TYPE_CLASS.OFFER} offers={[...nearOffers, {...offer, previewImage: ''} as Offer]}/>}
+              <Map city={CityInfo} type={MAP_TYPE_CLASS.OFFER} offers={[...nearOffers.slice(0,3), {...offer, previewImage: ''} as Offer]}/>}
           </section>
         )}
       {(nearOffers.length === 0 || requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> :
         <div className="container">
-          <NearPlaces nearOffers={nearOffers} onSelectHandler={() => {}}/>
+          <NearPlaces nearOffers={nearOffers.slice(0,3)} onSelectHandler={() => {}}/>
         </div>}
 
     </main>
   );
 };
 
-const loader = ({id}: Params<string>) => {
+const loader = ({id}: Params) => {
   const {selectedOffer} = store.getState().offers;
   if (!selectedOffer) {
     store.dispatch(fetchOffer(id!));

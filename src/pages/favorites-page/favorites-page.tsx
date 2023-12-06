@@ -1,19 +1,28 @@
 import React from 'react';
 import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
 import {Offer} from '../../contracts/contaracts.ts';
-import {useLoaderData} from 'react-router-dom';
 import {Card} from '../../components/card/card.tsx';
+import {useAppSelector} from '../../hooks/store.ts';
+import {store} from '../../store/store.ts';
+import {fetchOffer} from '../../store/slices/offers.ts';
 
 type GroupedOffers = {[k:string]: Offer[]}
 
 
 const FavoritesPage = () => {
   useDocumentTitle('Favorites');
-  const offers = useLoaderData() as Offer[];
+  const offers = useAppSelector((state) => state.favorites.favorites);
   const groupedOffers = Array.from(Object.entries(offers.reduce((arr: GroupedOffers , curr: Offer) => {
     (arr[curr.city['name']] = arr[curr.city['name']] || []).push(curr);
     return arr;
   }, {})));
+  const selectedCard = useAppSelector((state) => state.offers.selectedOffer);
+  const handleSelectedCard = (id: string | null) => {
+    if (selectedCard !== id && id !== null){
+      store.dispatch(fetchOffer(id));
+    }
+  };
+
   return (
     <React.Fragment>
       <main className="page__main page__main--favorites">
@@ -35,8 +44,7 @@ const FavoritesPage = () => {
                       <Card key={offer.id}
                         cardType={'Favorites'}
                         {...offer}
-                        onSelect={() => {
-                        }}
+                        onSelect={handleSelectedCard}
                       />))}
                   </div>
                 </li>))}
@@ -59,8 +67,5 @@ const FavoritesPage = () => {
   );
 };
 
-const loader = (offers: Offer[]) => offers.filter((offer) => offer.isFavorite);
-
-
-export {FavoritesPage, loader};
+export {FavoritesPage};
 

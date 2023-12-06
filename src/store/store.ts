@@ -4,6 +4,7 @@ import {commentsReducer, commentsSlice, CommentsState} from './slices/comments.t
 import {cityReducer, citySlice, CityState} from './slices/city.ts';
 import {createAPI} from '../api/api.ts';
 import {authenticationSlice, authenticationReducer, AuthenticationState} from './slices/authentication.ts';
+import {favoritesReducers, favoritesSlice} from './slices/favorites.ts';
 
 const api = createAPI();
 interface Store extends EnhancedStore{
@@ -19,7 +20,8 @@ const reducer = combineReducers({
   [offersSlice.name]: offersReducer,
   [citySlice.name]: cityReducer,
   [commentsSlice.name]: commentsReducer,
-  [authenticationSlice.name]: authenticationReducer});
+  [authenticationSlice.name]: authenticationReducer,
+  [favoritesSlice.name]: favoritesReducers});
 
 const store = configureStore({reducer,
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({thunk: {extraArgument: api}})});

@@ -1,9 +1,11 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
-import {Link} from 'react-router-dom';
-import {CardTypeValues} from '../../constants/constants.ts';
-import {useActionCreators} from '../../hooks/store.ts';
+import {Link, useNavigate} from 'react-router-dom';
+import {AppRoutes, AuthorizationStatus, CardTypeValues, FAVORITE_STATUS} from '../../constants/constants.ts';
+import {useActionCreators, useAppSelector} from '../../hooks/store.ts';
 import {offersActions} from '../../store/slices/offers.ts';
+import {store} from '../../store/store.ts';
+import {changeFavoriteStatus} from '../../store/slices/favorites.ts';
 
 type CardType = 'City' | 'Near-Places' | 'Favorites'
 
@@ -26,6 +28,8 @@ type CardProps = Pick<Offer,
 export const Card = (props: CardProps) => {
   const typeValues = CardTypeValues.get(props.cardType);
   const {removeSelectedOffer} = useActionCreators(offersActions);
+  const auth = useAppSelector((state) => state.authentication.status);
+  const navigate = useNavigate();
   const handleMouseEnter = () => {
     props.onSelect(props.id);
   };
@@ -34,6 +38,15 @@ export const Card = (props: CardProps) => {
       removeSelectedOffer();
     }
     props.onSelect(null);
+  };
+
+  const handleBookmarkButton = () => {
+    const statusToChange = (props.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
+    if(auth === AuthorizationStatus.Authorized) {
+      store.dispatch(changeFavoriteStatus({offerId: props.id, status: statusToChange}));
+    } else {
+      navigate(AppRoutes.LoginPage);
+    }
   };
 
   return (
@@ -59,6 +72,7 @@ export const Card = (props: CardProps) => {
           <button
             className={`place-card__bookmark button${(props.isFavorite) ? ' place-card__bookmark-button--active' : ''} button`}
             type="button"
+            onClick={handleBookmarkButton}
           >
             <svg className="place-card__bookmark-icon" width={18} height={19}>
               <use xlinkHref="#icon-bookmark"/>

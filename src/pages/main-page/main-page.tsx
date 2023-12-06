@@ -23,6 +23,7 @@ const MainPage = ({city}: MainPageProps) => {
   const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
   const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? [...filteredOffers] : [...filteredOffers].sort(CitySorts.get(sortType)!.sortFn);
   const selectedCard = selectedOffer?.id;
+
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
@@ -78,4 +79,3 @@ const loader = () => {
 
 };
 export {loader, MainPage};
-

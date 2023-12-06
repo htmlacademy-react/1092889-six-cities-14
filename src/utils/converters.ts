@@ -3,7 +3,7 @@ const enum Default {
   MAX_PERCENT = 100,
 }
 
-const convertRatingToPercent = (value: number) => ((value / Default.MAX_RATING) * Default.MAX_PERCENT);
+const convertRatingToPercent = (value: number) => ((Math.round(value) / Default.MAX_RATING) * Default.MAX_PERCENT);
 
 export {convertRatingToPercent};
 
