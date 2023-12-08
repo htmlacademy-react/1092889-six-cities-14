@@ -1,16 +1,16 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {Comment, CommentData, Offer} from '../../contracts/contaracts.ts';
-import {REQUEST_STATUS, ServerRoutes} from '../../constants/constants.ts';
+import {RequestStatus, ServerRoutes} from '../../constants/constants.ts';
 import {ThunkApi} from '../store-types.ts';
 
 interface CommentsState {
   comments: Comment[];
-  requestStatus: REQUEST_STATUS;
+  requestStatus: RequestStatus;
 }
 
 const initialState: CommentsState = {
   comments: [],
-  requestStatus: REQUEST_STATUS.IDLE
+  requestStatus: RequestStatus.Idle
 };
 
 const fetchComments = createAsyncThunk<Comment[], Offer['id'], ThunkApi>(
@@ -36,25 +36,25 @@ const commentsSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchComments.fulfilled, (state: CommentsState, action: PayloadAction<Comment[]>) => {
       state.comments = action.payload;
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
     });
     builder.addCase(fetchComments.rejected, (state: CommentsState) => {
-      state.requestStatus = REQUEST_STATUS.REJECTED;
+      state.requestStatus = RequestStatus.Rejected;
     });
     builder.addCase(fetchComments.pending, (state: CommentsState) => {
       state.comments = [];
-      state.requestStatus = REQUEST_STATUS.PENDING;
+      state.requestStatus = RequestStatus.Pending;
 
     });
     builder.addCase(sendComment.fulfilled, (state, action: PayloadAction<Comment>) => {
       state.comments.push(action.payload);
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
     });
     builder.addCase(sendComment.rejected, (state) => {
-      state.requestStatus = REQUEST_STATUS.REJECTED;
+      state.requestStatus = RequestStatus.Rejected;
     });
     builder.addCase(sendComment.pending, (state) => {
-      state.requestStatus = REQUEST_STATUS.PENDING;
+      state.requestStatus = RequestStatus.Pending;
     });
   }
 });

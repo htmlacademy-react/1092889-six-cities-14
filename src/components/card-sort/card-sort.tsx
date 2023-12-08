@@ -1,14 +1,14 @@
-import {CITY_SORT_TYPE, CITY_SORTS} from '../../constants/constants.ts';
+import {CitySortType, CITY_SORTS} from '../../constants/constants.ts';
 import {useState} from 'react';
 
 interface CardSortProps {
-  currentSort: CITY_SORT_TYPE;
-  onSortChange: (sortType: CITY_SORT_TYPE) => void;
+  currentSort: CitySortType;
+  onSortChange: (sortType: CitySortType) => void;
 }
 
 const CardSort = ({currentSort, onSortChange}: CardSortProps) => {
   const [isOpened, setIsOpened] = useState(false);
-  const handleSortChange = (key: CITY_SORT_TYPE) => {
+  const handleSortChange = (key: CitySortType) => {
     setIsOpened(!isOpened);
     onSortChange(key);
   };

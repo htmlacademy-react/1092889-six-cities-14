@@ -1,7 +1,7 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
 import {Link, useNavigate} from 'react-router-dom';
-import {APP_ROUTES, AUTHORIZATION_STATUS, CardTypeValues, FAVORITE_STATUS} from '../../constants/constants.ts';
+import {AppRoute, AuthorizationStatus, CardTypeValues, FavoriteStatus} from '../../constants/constants.ts';
 import {useActionCreators, useAppSelector} from '../../hooks/store.ts';
 import {offersActions} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
@@ -42,11 +42,11 @@ export const Card = (props: CardProps) => {
   };
 
   const handleBookmarkButton = () => {
-    const statusToChange = (props.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
-    if(auth === AUTHORIZATION_STATUS.AUTHORIZED) {
+    const statusToChange = (props.isFavorite) ? FavoriteStatus.Not_Favorite : FavoriteStatus.Favorite;
+    if(auth === AuthorizationStatus.Authorized) {
       store.dispatch(changeFavoriteStatus({offerId: props.id, status: statusToChange}));
     } else {
-      navigate(APP_ROUTES.LOGIN);
+      navigate(AppRoute.Login);
     }
   };
 

@@ -1,6 +1,6 @@
 import {Link, NavLink} from 'react-router-dom';
 
-const Page404 = () => (
+const ErrorPage = () => (
   <div className="page page--gray page--main">
     <header className="header">
       <div className="container">
@@ -39,4 +39,4 @@ const Page404 = () => (
   </div>
 );
 
-export {Page404};
+export {ErrorPage};

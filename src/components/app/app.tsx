@@ -3,16 +3,19 @@ import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {LoginPage} from '../../pages/login-page/login-page.tsx';
 import {OfferPage, loader as OfferPageLoader} from '../../pages/offer-page/offer-Page.tsx';
 import {FavoritesPage} from '../../pages/favorites-page/favorites-page.tsx';
-import {AuthorizedRoute} from '../authorization/authorized-route.tsx';
-import {APP_ROUTES, CITIES} from '../../constants/constants.ts';
+import {AuthRoute} from '../auth-route/auth-route.tsx';
+import {AppRoute, CITIES} from '../../constants/constants.ts';
 import {Layout, loader as LayoutLoader} from '../layout/layout.tsx';
-import {Page404} from '../../error-page/404-page.tsx';
+import {ErrorPage} from '../../pages/error-page/error-page.tsx';
+import {store} from '../../store/store.ts';
+import {checkAuth} from '../../store/slices/authentication.ts';
 
 export const App = () => {
+  store.dispatch(checkAuth());
 
   const router = createBrowserRouter([{
     element: <Layout/>,
-    errorElement:<Page404 />,
+    errorElement:<ErrorPage />,
     loader: () => LayoutLoader(),
     children: [{
       element: <Navigate to={`/${CITIES[0].name}`}/>,
@@ -24,24 +27,24 @@ export const App = () => {
       loader: MainPageLoader,
     })),
     {
-      path: APP_ROUTES.OFFER,
+      path: AppRoute.Offers,
       element: <OfferPage/>,
       loader: ({params}) => OfferPageLoader(params),
     },
     {
-      element: <AuthorizedRoute/>,
+      element: <AuthRoute/>,
       children: [{
-        path: APP_ROUTES.FAVORITES,
+        path: AppRoute.Favorites,
         element: <FavoritesPage/>,
       }]
     },
     {
       element: <LoginPage/>,
-      path: APP_ROUTES.LOGIN,
+      path: AppRoute.Login,
     }]
   }, {
     path: '*',
-    element: <Page404/>,
+    element: <ErrorPage/>,
   }]);
 
   return (

@@ -2,15 +2,15 @@ import {Icon} from 'leaflet';
 import {City, Offer, User} from '../contracts/contaracts.ts';
 
 const PLACEHOLDER_NUMBER = 0;
-const enum AUTHORIZATION_STATUS {
-  AUTHORIZED = 1,
-  UNAUTHORIZED = 2,
-  UNKNOWN = 0
+const enum AuthorizationStatus {
+  Authorized = 1,
+  Unauthorized = 2,
+  Unknown = 0
 }
 
-const enum FAVORITE_STATUS {
-  FAVORITE = 1,
-  NOT_FAVORITE = 0
+const enum FavoriteStatus {
+  Favorite = 1,
+  Not_Favorite = 0
 }
 
 const EMPTY_USER: User = {
@@ -21,11 +21,11 @@ const EMPTY_USER: User = {
   email: ''
 };
 
-const enum REQUEST_STATUS {
-  IDLE = 0,
-  PENDING = 1,
-  REJECTED = 2,
-  FULFILLED = 3
+const enum RequestStatus {
+  Idle = 0,
+  Pending = 1,
+  Rejected = 2,
+  Fulfilled = 3
 }
 
 const MAP_LAYER_URL = 'https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png';
@@ -92,15 +92,15 @@ const CITIES: City[] = [{
   }
 },];
 
-const enum MAP_TYPE_CLASS {
-  CITY = 'cities__map',
-  OFFER = 'offer__map'
+const enum MapTypeOffer {
+  Cities = 'cities__map',
+  Offers = 'offer__map'
 }
 
-const enum APP_ROUTES {
-  LOGIN = '/login',
-  FAVORITES = '/favorites',
-  OFFER = '/offer/:id',
+const enum AppRoute {
+  Login = '/login',
+  Favorites = '/favorites',
+  Offers = '/offer/:id',
 }
 
 const CardTypeValues = new Map([
@@ -126,27 +126,27 @@ const CardTypeValues = new Map([
   }]
 ]);
 
-const enum CITY_SORT_TYPE {
-  POPULAR = 'popular',
-  TOP = 'top',
-  HIGH_TO_LOW = 'high to low',
-  LOW_TO_HIGH = 'low to high'
+const enum CitySortType {
+  Popular = 'popular',
+  Top = 'top',
+  HighToLow = 'high to low',
+  LowToHigh = 'low to high'
 }
 
 const CITY_SORTS = new Map([
-  [CITY_SORT_TYPE.POPULAR,{
+  [CitySortType.Popular,{
     name: 'Popular',
     sortFn: () => PLACEHOLDER_NUMBER,
   }],
-  [CITY_SORT_TYPE.LOW_TO_HIGH, {
+  [CitySortType.LowToHigh, {
     name: 'Price: low to high',
     sortFn: (a: Offer,b: Offer) => a.price - b.price
   }],
-  [CITY_SORT_TYPE.HIGH_TO_LOW, {
+  [CitySortType.HighToLow, {
     name: 'Price: high to low',
     sortFn: (a: Offer,b: Offer) => b.price - a.price
   }],
-  [CITY_SORT_TYPE.TOP, {
+  [CitySortType.Top, {
     name: 'Top rated first',
     sortFn: (a: Offer,b: Offer) => b.rating - a.rating
   }]
@@ -164,20 +164,20 @@ const ServerRoutes = {
 };
 
 export {
-  AUTHORIZATION_STATUS,
+  AuthorizationStatus,
   CITIES,
-  APP_ROUTES,
+  AppRoute,
   MAP_LAYER_URL,
   MARKER_URL,
   MARKER_URL_ACTIVE,
   OPENSOURCE_ATTRIBUTION,
   DEFAULT_ICON,
   ACTIVE_ICON,
-  MAP_TYPE_CLASS,
+  MapTypeOffer,
   CardTypeValues,
-  CITY_SORT_TYPE,
+  CitySortType,
   CITY_SORTS,
-  REQUEST_STATUS,
+  RequestStatus,
   EMPTY_USER,
   ServerRoutes,
-  FAVORITE_STATUS};
+  FavoriteStatus};

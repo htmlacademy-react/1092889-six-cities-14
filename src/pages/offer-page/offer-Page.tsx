@@ -1,20 +1,20 @@
 import {convertRatingToPercent} from '../../utils/converters.ts';
-import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
+import {useDocumentTitle} from '../../hooks/use-document-title.ts';
 import {ReviewsList} from '../../components/reviews-list/reviews-list.tsx';
 import {Map} from '../../components/map/map.tsx';
 import {
-  APP_ROUTES,
-  AUTHORIZATION_STATUS,
-  FAVORITE_STATUS,
-  MAP_TYPE_CLASS,
-  REQUEST_STATUS
+  AppRoute,
+  AuthorizationStatus,
+  FavoriteStatus,
+  MapTypeOffer,
+  RequestStatus
 } from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {store} from '../../store/store.ts';
 import {fetchComments} from '../../store/slices/comments.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {fetchNearOffers, fetchOffer} from '../../store/slices/offers.ts';
-import {NearPlaces} from '../../components/near-places/nearPlaces.tsx';
+import {NearPlaces} from '../../components/near-places/near-places.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 import {Offer} from '../../contracts/contaracts.ts';
 import {Params, useNavigate} from 'react-router-dom';
@@ -32,15 +32,15 @@ const OfferPage = () => {
   const auth = useAppSelector((state) => state.authentication.status);
   const navigate = useNavigate();
 
-  if (requestStatus === REQUEST_STATUS.REJECTED) {
+  if (requestStatus === RequestStatus.Rejected) {
     navigate('*');
   }
   const handleBookmarkButton = () => {
-    const statusToChange = (offer!.isFavorite) ? FAVORITE_STATUS.NOT_FAVORITE : FAVORITE_STATUS.FAVORITE;
-    if(auth === AUTHORIZATION_STATUS.AUTHORIZED) {
+    const statusToChange = (offer!.isFavorite) ? FavoriteStatus.Not_Favorite : FavoriteStatus.Favorite;
+    if(auth === AuthorizationStatus.Authorized) {
       store.dispatch(changeFavoriteStatus({offerId: offer!.id, status: statusToChange}));
     } else {
-      navigate(APP_ROUTES.LOGIN);
+      navigate(AppRoute.Login);
     }
   };
   return (
@@ -125,14 +125,14 @@ const OfferPage = () => {
                     </p>
                   </div>
                 </div>
-                {(store.getState().comments.requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> : <ReviewsList comments={comments}/>}
+                {(store.getState().comments.requestStatus === RequestStatus.Pending) ? <Spinner /> : <ReviewsList comments={comments}/>}
               </div>
             </div>
             {(nearOffers.length === 0) ? <Spinner /> :
-              <Map city={CityInfo} type={MAP_TYPE_CLASS.OFFER} offers={[...nearOffers.slice(0,3), {...offer, previewImage: ''} as Offer]}/>}
+              <Map city={CityInfo} type={MapTypeOffer.Offers} offers={[...nearOffers.slice(0,3), {...offer, previewImage: ''} as Offer]}/>}
           </section>
         )}
-      {(nearOffers.length === 0 && requestStatus === REQUEST_STATUS.PENDING) ? <Spinner /> :
+      {(nearOffers.length === 0 && requestStatus === RequestStatus.Pending) ? <Spinner /> :
         <div className="container">
           <NearPlaces onSelectHandler={() => {}}/>
         </div>}
