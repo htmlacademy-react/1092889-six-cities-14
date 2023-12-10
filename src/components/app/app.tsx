@@ -1,14 +1,18 @@
-import {loader as MainPageLoader, MainPage} from '../../pages/main-page/main-page.tsx';
+import {MainPage} from '../../pages/main-page/main-page.tsx';
 import {createBrowserRouter, Navigate, RouterProvider} from 'react-router-dom';
 import {LoginPage} from '../../pages/login-page/login-page.tsx';
-import {OfferPage, loader as OfferPageLoader} from '../../pages/offer-page/offer-Page.tsx';
+import {OfferPage} from '../../pages/offer-page/offer-page.tsx';
 import {FavoritesPage} from '../../pages/favorites-page/favorites-page.tsx';
 import {AuthRoute} from '../auth-route/auth-route.tsx';
-import {AppRoute, CITIES} from '../../constants/constants.ts';
-import {Layout, loader as LayoutLoader} from '../layout/layout.tsx';
+import {AppRoute, cities} from '../../constants/constants.ts';
+import {Layout} from '../layout/layout.tsx';
 import {ErrorPage} from '../../pages/error-page/error-page.tsx';
 import {store} from '../../store/store.ts';
 import {checkAuth} from '../../store/slices/authentication.ts';
+import {mainPageLoader} from '../../pages/main-page/main-page-loader.ts';
+import {layoutLoader} from '../layout/layout-loader.ts';
+import {offerPageLoader} from '../../pages/offer-page/offer-page-loader.ts';
+
 
 export const App = () => {
   store.dispatch(checkAuth());
@@ -16,20 +20,20 @@ export const App = () => {
   const router = createBrowserRouter([{
     element: <Layout/>,
     errorElement:<ErrorPage />,
-    loader: () => LayoutLoader(),
+    loader: layoutLoader,
     children: [{
-      element: <Navigate to={`/${CITIES[0].name}`}/>,
+      element: <Navigate to={`/${cities[0].name}`}/>,
       index: true,
     },
-    ...CITIES.map((city) => ({
+    ...cities.map((city) => ({
       element: <MainPage city={city}/>,
       path: `/${city.name}`,
-      loader: MainPageLoader,
+      loader: mainPageLoader,
     })),
     {
       path: AppRoute.Offers,
       element: <OfferPage/>,
-      loader: ({params}) => OfferPageLoader(params),
+      loader: ({params}) => offerPageLoader(params),
     },
     {
       element: <AuthRoute/>,

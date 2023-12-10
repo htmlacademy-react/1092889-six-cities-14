@@ -11,13 +11,11 @@ import {
 } from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {store} from '../../store/store.ts';
-import {fetchComments} from '../../store/slices/comments.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
-import {fetchNearOffers, fetchOffer} from '../../store/slices/offers.ts';
 import {NearPlaces} from '../../components/near-places/near-places.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 import {Offer} from '../../contracts/contaracts.ts';
-import {Params, useNavigate} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 import {changeFavoriteStatus} from '../../store/slices/favorites.ts';
 import clsx from 'clsx';
 
@@ -141,17 +139,5 @@ const OfferPage = () => {
   );
 };
 
-const loader = ({id}: Params) => {
-  const {selectedOffer} = store.getState().offers;
-  if (!selectedOffer) {
-    store.dispatch(fetchOffer(id!));
-  } else if(selectedOffer.id !== id!) {
-    store.dispatch(fetchOffer(id!));
-  }
-  store.dispatch(fetchComments(id!));
-  store.dispatch(fetchNearOffers(id!));
-  return null;
-};
-
-export {loader, OfferPage};
+export {OfferPage};
 

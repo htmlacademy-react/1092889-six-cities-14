@@ -5,8 +5,10 @@ import {useAppSelector} from '../../hooks/store.ts';
 interface NearPlacesProps {
   onSelectHandler: (id: Offer['id'] | null) => void;
 }
+const MAX_NEAR_OFFERS = 3;
+
 const NearPlaces = (props: NearPlacesProps) => {
-  const nearOffers = useAppSelector((state) => state.offers.nearOffers).slice(0,3);
+  const nearOffers = useAppSelector((state) => state.offers.nearOffers).slice(0,MAX_NEAR_OFFERS);
 
 
   return (

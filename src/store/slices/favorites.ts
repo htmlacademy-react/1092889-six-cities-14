@@ -1,8 +1,7 @@
-import {Offer} from '../../contracts/contaracts.ts';
+import {FavoriteStatusChangePayload, Offer} from '../../contracts/contaracts.ts';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ThunkApi} from '../store-types.ts';
 import {
-  FavoriteStatus,
   RequestStatus,
   ServerRoutes
 } from '../../constants/constants.ts';
@@ -25,7 +24,7 @@ const fetchFavorites = createAsyncThunk<Offer[], undefined, ThunkApi>(
     return response.data;
   }
 );
-const changeFavoriteStatus = createAsyncThunk<Offer, {offerId: Offer['id']; status: FavoriteStatus }, ThunkApi>(
+const changeFavoriteStatus = createAsyncThunk<Offer, FavoriteStatusChangePayload, ThunkApi>(
   'changeFavoriteStatus',
   async ({offerId, status}, {extra: api}) => {
     const response = await api.post<Offer>(`${ServerRoutes.favorite}/${offerId}/${status}`);

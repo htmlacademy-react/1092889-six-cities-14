@@ -1,7 +1,7 @@
 import {Offer} from '../../contracts/contaracts.ts';
 import {convertRatingToPercent} from '../../utils/converters.ts';
 import {Link, useNavigate} from 'react-router-dom';
-import {AppRoute, AuthorizationStatus, CardTypeValues, FavoriteStatus} from '../../constants/constants.ts';
+import {AppRoute, AuthorizationStatus, cardTypeValues, FavoriteStatus} from '../../constants/constants.ts';
 import {useActionCreators, useAppSelector} from '../../hooks/store.ts';
 import {offersActions} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
@@ -27,7 +27,7 @@ type CardProps = Pick<Offer,
 | 'type'> & SelectHandler & CardPropsType
 
 export const Card = (props: CardProps) => {
-  const typeValues = CardTypeValues.get(props.cardType);
+  const typeValues = cardTypeValues.get(props.cardType);
   const {removeSelectedOffer} = useActionCreators(offersActions);
   const auth = useAppSelector((state) => state.authentication.status);
   const navigate = useNavigate();

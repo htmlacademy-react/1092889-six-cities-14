@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
-import {Comment, CommentData, Offer} from '../../contracts/contaracts.ts';
+import {Comment, Offer, SendCommentPayload} from '../../contracts/contaracts.ts';
 import {RequestStatus, ServerRoutes} from '../../constants/constants.ts';
 import {ThunkApi} from '../store-types.ts';
 
@@ -21,9 +21,9 @@ const fetchComments = createAsyncThunk<Comment[], Offer['id'], ThunkApi>(
   }
 );
 
-const sendComment = createAsyncThunk<Comment, { comment: CommentData; offerId: Offer['id'] }, ThunkApi>(
+const sendComment = createAsyncThunk<Comment, SendCommentPayload, ThunkApi>(
   'sendComment',
-  async ({comment,offerId}, {extra: api}) => {
+  async ({offerId,comment}, {extra: api}) => {
     const response = await api.post<Comment>(`${ServerRoutes.comments}${offerId}`,comment);
     return response.data;
   }
