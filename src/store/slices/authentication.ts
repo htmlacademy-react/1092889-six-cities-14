@@ -35,7 +35,7 @@ interface AuthenticationState {
   requestStatus: RequestStatus;
 }
 
-const initialState = {
+const initialState: AuthenticationState = {
   status: AuthorizationStatus.Unknown,
   user: EMPTY_USER,
   requestStatus: RequestStatus.Idle
