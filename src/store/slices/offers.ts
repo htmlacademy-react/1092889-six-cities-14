@@ -6,6 +6,7 @@ import {changeFavoriteStatus} from './favorites.ts';
 
 interface OffersState {
   offers: Offer[];
+  selectedOfferId: Offer['id'] | null;
   selectedOffer?: DetailedOffer | null;
   nearOffers: Offer[];
   requestStatus: RequestStatus;
@@ -14,6 +15,7 @@ interface OffersState {
 
 const initialState: OffersState = {
   offers: [],
+  selectedOfferId: null,
   selectedOffer: null,
   nearOffers:[],
   requestStatus: RequestStatus.Idle,
@@ -50,6 +52,9 @@ const offersSlice = createSlice({
     removeSelectedOffer: (state) => {
       state.selectedOffer = null;
     },
+    setSelectedOfferId: (state, action: PayloadAction<Offer['id'] | null>) => {
+      state.selectedOfferId = action.payload;
+    }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllOffers.fulfilled,(state: OffersState, action: PayloadAction<Offer[]>) => {

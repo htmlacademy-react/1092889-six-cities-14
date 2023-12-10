@@ -6,7 +6,7 @@ import {Map} from '../../components/map/map.tsx';
 import {CitySortType, citySorts, MapTypeOffer, RequestStatus} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {CardSort} from '../../components/card-sort/card-sort.tsx';
-import {fetchOffer} from '../../store/slices/offers.ts';
+import {fetchOffer, offersSlice} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
@@ -20,10 +20,8 @@ interface MainPageProps {
 const MainPage = ({city}: MainPageProps) => {
   const [sortType, setSortType] = useState(CitySortType.Popular);
   const offers = useAppSelector((state) => state.offers.offers);
-  //const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   const filteredOffers = useMemo(() => offers.filter((offer) => offer.city.name === city.name), [offers, city]);
   const currentOffers = useMemo(() => (sortType === CitySortType.Popular) ? filteredOffers : filteredOffers.sort(citySorts.get(sortType)!.sortFn), [sortType, filteredOffers]);
-  //const selectedCard = selectedOffer?.id;
   const dispatchOffer = (id: string) => {
     store.dispatch(fetchOffer(id));
   };
@@ -36,8 +34,9 @@ const MainPage = ({city}: MainPageProps) => {
   },[city]);
 
   const handleSelectedCard = (id: string | null) => {
-    const selectedCard = store.getState().offers.selectedOffer;
-    if (selectedCard?.id !== id && id !== null) {
+    const selectedOfferId = store.getState().offers.selectedOfferId;
+    store.dispatch(offersSlice.actions.setSelectedOfferId(id));
+    if (selectedOfferId !== id && id !== null) {
       debouncedFetchOffer(id);
     }
   };

@@ -17,7 +17,8 @@ function Map(props: MapProps) {
   const interactive = (MapTypeOffer.Cities) === props.type;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city, interactive);
-  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
+  const selectedOfferId = useAppSelector((state) => state.offers.selectedOfferId);
+  const selectedOffer = offers.find((offer) => offer.id === selectedOfferId);
   useEffect(() => {
     if (map) {
       const markerLayer = layerGroup().addTo(map);
