@@ -3,24 +3,27 @@ import {Fragment} from 'react';
 import {useAppSelector} from '../../hooks/store.ts';
 import {store} from '../../store/store.ts';
 import {sendComment} from '../../store/slices/comments.ts';
+import {
+  MAX_COMMENT_LENGTH,
+  MIN_COMMENT_LENGTH,
+  MIN_RATING,
+  ratingTable
+} from '../../constants/constants.ts';
+import {toast} from 'react-toastify';
+
+const InitialReviewState = {
+  comment: '',
+  rating: 0
+};
 
 const ReviewForm = () => {
-  const [review, setReview] = useState({
-    comment: '',
-    rating: 0,
-  });
+  const [review, setReview] = useState(InitialReviewState);
   const [isDisabled, setIsDisabled] = useState(false);
 
   const selectedOfferId = useAppSelector((state) => state.offers.selectedOffer!.id);
 
-  const ratingTable = [
-    {id: '5-stars', value: 5, title: 'perfect'},
-    {id: '4-stars', value: 4, title: 'good'},
-    {id: '3-stars', value: 3, title: 'not bad'},
-    {id: '2-stars', value: 2, title: 'badly'},
-    {id: '1-stars', value: 1, title: 'terribly'}
-  ];
-  const isValid = () => ((review.rating >= 1 && review.comment.length >= 50 && review.comment.length <= 300));
+
+  const isValid = () => ((review.rating >= MIN_RATING && review.comment.length >= MIN_COMMENT_LENGTH && review.comment.length <= MAX_COMMENT_LENGTH));
   const handleRatingChange = (evt : React.ChangeEvent<HTMLInputElement>) => {
     if (Number(evt.target.value) === review.rating) {
       return;
@@ -40,9 +43,9 @@ const ReviewForm = () => {
       if(value.meta.requestStatus === 'rejected') {
         throw new Error('Comment was not delivered');
       }
-      setReview({comment: '', rating: 0,});
+      setReview(InitialReviewState);
       form.reset();
-    }).catch()
+    }).catch((e: Error) => toast.warn(e.message))
       .finally(() =>{
         setIsDisabled(false);
       });

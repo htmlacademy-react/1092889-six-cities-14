@@ -3,10 +3,10 @@ import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
 import {Fragment, useEffect, useMemo, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
-import {CitySortType, CITY_SORTS, MapTypeOffer, RequestStatus} from '../../constants/constants.ts';
+import {CitySortType, citySorts, MapTypeOffer, RequestStatus} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {CardSort} from '../../components/card-sort/card-sort.tsx';
-import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
+import {fetchOffer} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
 import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
@@ -20,14 +20,14 @@ interface MainPageProps {
 const MainPage = ({city}: MainPageProps) => {
   const [sortType, setSortType] = useState(CitySortType.Popular);
   const offers = useAppSelector((state) => state.offers.offers);
-  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
+  //const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
   const filteredOffers = useMemo(() => offers.filter((offer) => offer.city.name === city.name), [offers, city]);
-  const currentOffers = useMemo(() => (sortType === CitySortType.Popular) ? filteredOffers : filteredOffers.sort(CITY_SORTS.get(sortType)!.sortFn), [sortType, filteredOffers]);
-  const selectedCard = selectedOffer?.id;
+  const currentOffers = useMemo(() => (sortType === CitySortType.Popular) ? filteredOffers : filteredOffers.sort(citySorts.get(sortType)!.sortFn), [sortType, filteredOffers]);
+  //const selectedCard = selectedOffer?.id;
   const dispatchOffer = (id: string) => {
     store.dispatch(fetchOffer(id));
   };
-  const debouncedFetchOffer = debounce(dispatchOffer, 500);
+  const debouncedFetchOffer = debounce(dispatchOffer, 400);
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
@@ -36,7 +36,8 @@ const MainPage = ({city}: MainPageProps) => {
   },[city]);
 
   const handleSelectedCard = (id: string | null) => {
-    if (selectedCard !== id && id !== null){
+    const selectedCard = store.getState().offers.selectedOffer;
+    if (selectedCard?.id !== id && id !== null) {
       debouncedFetchOffer(id);
     }
   };
@@ -74,12 +75,5 @@ const MainPage = ({city}: MainPageProps) => {
   );
 };
 
-const loader = () => {
-  const {offers} = store.getState();
-  if(offers.requestStatus === RequestStatus.Idle || (offers.requestStatus === RequestStatus.Fulfilled && offers.offers.length === 0)) {
-    store.dispatch(fetchAllOffers());
-  }
-  return null;
 
-};
-export {loader, MainPage};
+export {MainPage};

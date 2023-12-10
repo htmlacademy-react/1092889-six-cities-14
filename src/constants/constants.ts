@@ -45,8 +45,19 @@ const ACTIVE_ICON = new Icon({
   iconAnchor: [20, 40]
 });
 
+const ratingTable = [
+  {id: '5-stars', value: 5, title: 'perfect'},
+  {id: '4-stars', value: 4, title: 'good'},
+  {id: '3-stars', value: 3, title: 'not bad'},
+  {id: '2-stars', value: 2, title: 'badly'},
+  {id: '1-stars', value: 1, title: 'terribly'}
+];
 
-const CITIES: City[] = [{
+const MIN_RATING = 1;
+const MIN_COMMENT_LENGTH = 50;
+const MAX_COMMENT_LENGTH = 300;
+
+const cities: City[] = [{
   name: 'Paris',
   location: {
     latitude: 48.85661,
@@ -103,7 +114,7 @@ const enum AppRoute {
   Offers = '/offer/:id',
 }
 
-const CardTypeValues = new Map([
+const cardTypeValues = new Map([
   ['City', {
     articleClass: 'cities__card',
     imageClass: 'cities__image-wrapper',
@@ -133,7 +144,7 @@ const enum CitySortType {
   LowToHigh = 'low to high'
 }
 
-const CITY_SORTS = new Map([
+const citySorts = new Map([
   [CitySortType.Popular,{
     name: 'Popular',
     sortFn: () => PLACEHOLDER_NUMBER,
@@ -165,7 +176,7 @@ const ServerRoutes = {
 
 export {
   AuthorizationStatus,
-  CITIES,
+  cities,
   AppRoute,
   MAP_LAYER_URL,
   MARKER_URL,
@@ -174,10 +185,15 @@ export {
   DEFAULT_ICON,
   ACTIVE_ICON,
   MapTypeOffer,
-  CardTypeValues,
+  cardTypeValues,
   CitySortType,
-  CITY_SORTS,
+  citySorts,
   RequestStatus,
   EMPTY_USER,
   ServerRoutes,
-  FavoriteStatus};
+  FavoriteStatus,
+  ratingTable,
+  MIN_RATING,
+  MIN_COMMENT_LENGTH,
+  MAX_COMMENT_LENGTH
+};

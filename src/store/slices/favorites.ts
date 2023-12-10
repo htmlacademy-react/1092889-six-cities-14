@@ -1,21 +1,17 @@
-import {Offer} from '../../contracts/contaracts.ts';
+import {FavoriteStatusChangePayload, Offer} from '../../contracts/contaracts.ts';
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit';
 import {ThunkApi} from '../store-types.ts';
 import {
-  FavoriteStatus,
-  RequestStatus,
   ServerRoutes
 } from '../../constants/constants.ts';
 import {logout} from './authentication.ts';
 
 interface FavoritesState {
   favorites: Offer[];
-  requestStatus: RequestStatus;
 }
 
 const initialState: FavoritesState = {
   favorites: [],
-  requestStatus: RequestStatus.Idle,
 };
 
 const fetchFavorites = createAsyncThunk<Offer[], undefined, ThunkApi>(
@@ -25,7 +21,7 @@ const fetchFavorites = createAsyncThunk<Offer[], undefined, ThunkApi>(
     return response.data;
   }
 );
-const changeFavoriteStatus = createAsyncThunk<Offer, {offerId: Offer['id']; status: FavoriteStatus }, ThunkApi>(
+const changeFavoriteStatus = createAsyncThunk<Offer, FavoriteStatusChangePayload, ThunkApi>(
   'changeFavoriteStatus',
   async ({offerId, status}, {extra: api}) => {
     const response = await api.post<Offer>(`${ServerRoutes.favorite}/${offerId}/${status}`);
@@ -40,13 +36,6 @@ const favoritesSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(fetchFavorites.fulfilled, (state, action) => {
       state.favorites = action.payload;
-      state.requestStatus = RequestStatus.Fulfilled;
-    });
-    builder.addCase(fetchFavorites.rejected, (state) => {
-      state.requestStatus = RequestStatus.Rejected;
-    });
-    builder.addCase(fetchFavorites.pending, (state) => {
-      state.requestStatus = RequestStatus.Pending;
     });
     builder.addCase(changeFavoriteStatus.fulfilled, (state, action) => {
       const replaceIndex = state.favorites.find((el) => el.id === action.payload.id)!;
@@ -55,13 +44,6 @@ const favoritesSlice = createSlice({
       } else {
         state.favorites.push(action.payload);
       }
-      state.requestStatus = RequestStatus.Fulfilled;
-    });
-    builder.addCase(changeFavoriteStatus.rejected, (state) => {
-      state.requestStatus = RequestStatus.Rejected;
-    });
-    builder.addCase(changeFavoriteStatus.pending, (state) => {
-      state.requestStatus = RequestStatus.Pending;
     });
     builder.addCase(logout.fulfilled, (state) => {
       state.favorites = [];
