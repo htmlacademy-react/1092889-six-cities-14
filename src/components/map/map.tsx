@@ -2,19 +2,19 @@ import {useEffect, useRef} from 'react';
 import {layerGroup, Marker} from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import {City, Offer} from '../../contracts/contaracts.ts';
-import {useMap} from '../../hooks/useMap.ts';
-import {ACTIVE_ICON, DEFAULT_ICON, MAP_TYPE_CLASS} from '../../constants/constants.ts';
+import {useMap} from '../../hooks/use-map.ts';
+import {ACTIVE_ICON, DEFAULT_ICON, MapTypeOffer} from '../../constants/constants.ts';
 import {useAppSelector} from '../../hooks/store.ts';
 
 type MapProps = {
   city: City;
-  type: MAP_TYPE_CLASS;
+  type: MapTypeOffer;
   offers: Offer[];
 };
 
 function Map(props: MapProps) {
   const {city, offers} = props;
-  const interactive = (MAP_TYPE_CLASS.CITY) === props.type;
+  const interactive = (MapTypeOffer.Cities) === props.type;
   const mapRef = useRef(null);
   const map = useMap(mapRef, city, interactive);
   const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);

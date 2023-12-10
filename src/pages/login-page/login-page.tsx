@@ -1,8 +1,8 @@
-import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
+import {useDocumentTitle} from '../../hooks/use-document-title.ts';
 import {store} from '../../store/store.ts';
 import {login} from '../../store/slices/authentication.ts';
 import {FormEvent, useState} from 'react';
-import {AUTHORIZATION_STATUS, CITIES} from '../../constants/constants.ts';
+import {AuthorizationStatus, cities} from '../../constants/constants.ts';
 import {Navigate, NavLink} from 'react-router-dom';
 import {LoginCredentials} from '../../contracts/contaracts.ts';
 import {useAppSelector} from '../../hooks/store.ts';
@@ -11,7 +11,7 @@ import {useAppSelector} from '../../hooks/store.ts';
 export const LoginPage = () => {
   const authStatus = useAppSelector((state) => state.authentication.status);
   const [isDisabled, setIsDisabled] = useState(false);
-  const [randomCity] = useState(CITIES[Math.floor(Math.random() * CITIES.length)]);
+  const [randomCity] = useState(cities[Math.floor(Math.random() * cities.length)]);
   useDocumentTitle('Login');
   const handleLogin = (evt: FormEvent) => {
     evt.preventDefault();
@@ -28,7 +28,7 @@ export const LoginPage = () => {
 
   return (
     <div className="page page--gray page--login">
-      {(authStatus === AUTHORIZATION_STATUS.AUTHORIZED) ? <Navigate to={'/'} /> : ''}
+      {(authStatus === AuthorizationStatus.Authorized) ? <Navigate to={'/'} /> : ''}
       <header className="header">
         <div className="container">
           <div className="header__wrapper">
