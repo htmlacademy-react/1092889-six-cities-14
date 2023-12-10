@@ -1,3 +1,5 @@
+import {FavoriteStatus} from '../constants/constants.ts';
+
 type LocationInfo = {
   latitude: number;
   longitude: number;
@@ -56,6 +58,15 @@ type CommentData = {
   comment: string;
   rating: number;
 }
+type FavoriteStatusChangePayload = {
+  offerId: Offer['id'];
+  status: FavoriteStatus;
+}
+
+type SendCommentPayload = {
+  offerId: Offer['id'];
+  comment: CommentData;
+}
 
 export type {
   User,
@@ -65,6 +76,8 @@ export type {
   DetailedOffer,
   Comment,
   LoginCredentials,
-  CommentData
+  CommentData,
+  FavoriteStatusChangePayload,
+  SendCommentPayload
 };
 

@@ -1,53 +1,58 @@
 import {City, Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../../components/card/card.tsx';
 import {Tabs} from '../../components/tabs/tabs.tsx';
-import {Fragment, useEffect, useState} from 'react';
+import {Fragment, useEffect, useMemo, useState} from 'react';
 import {Map} from '../../components/map/map.tsx';
-import {CITY_SORT_TYPE, CITY_SORTS, MAP_TYPE_CLASS, REQUEST_STATUS} from '../../constants/constants.ts';
+import {CitySortType, citySorts, MapTypeOffer, RequestStatus} from '../../constants/constants.ts';
 import {isPlural} from '../../utils/intl.ts';
 import {CardSort} from '../../components/card-sort/card-sort.tsx';
-import {fetchAllOffers, fetchOffer} from '../../store/slices/offers.ts';
+import {fetchOffer} from '../../store/slices/offers.ts';
 import {store} from '../../store/store.ts';
 import {Spinner} from '../../components/spinner/spinner.tsx';
-import {EmptyMain} from '../../components/empty/empty-main.tsx';
+import {EmptyMain} from '../../components/empty-main/empty-main.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
+import {debounce} from '../../utils/debounce.ts';
 
 interface MainPageProps {
   city: City;
 }
 
 const MainPage = ({city}: MainPageProps) => {
-  const [sortType, setSortType] = useState(CITY_SORT_TYPE.POPULAR);
+  const [sortType, setSortType] = useState(CitySortType.Popular);
   const offers = useAppSelector((state) => state.offers.offers);
-  const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
-  const filteredOffers = offers.filter((offer) => offer.city.name === city.name);
-  const currentOffers = (sortType === CITY_SORT_TYPE.POPULAR) ? filteredOffers : filteredOffers.sort(CITY_SORTS.get(sortType)!.sortFn);
-  const selectedCard = selectedOffer?.id;
-
+  //const selectedOffer = useAppSelector((state) => state.offers.selectedOffer);
+  const filteredOffers = useMemo(() => offers.filter((offer) => offer.city.name === city.name), [offers, city]);
+  const currentOffers = useMemo(() => (sortType === CitySortType.Popular) ? filteredOffers : filteredOffers.sort(citySorts.get(sortType)!.sortFn), [sortType, filteredOffers]);
+  //const selectedCard = selectedOffer?.id;
+  const dispatchOffer = (id: string) => {
+    store.dispatch(fetchOffer(id));
+  };
+  const debouncedFetchOffer = debounce(dispatchOffer, 400);
   useEffect(() => {
     if (document.title !== city.name) {
       document.title = city.name;
     }
-    setSortType(CITY_SORT_TYPE.POPULAR);
+    setSortType(CitySortType.Popular);
   },[city]);
 
   const handleSelectedCard = (id: string | null) => {
-    if (selectedCard !== id && id !== null){
-      store.dispatch(fetchOffer(id));
+    const selectedCard = store.getState().offers.selectedOffer;
+    if (selectedCard?.id !== id && id !== null) {
+      debouncedFetchOffer(id);
     }
   };
 
-  const handleSortChange = (type: CITY_SORT_TYPE) => {
+  const handleSortChange = (type: CitySortType) => {
     setSortType(type);
   };
 
   return (
     <div className="page page--gray page--main">
-      <main className={`page__main page__main--index ${(currentOffers.length === 0 && store.getState().offers.requestStatus !== REQUEST_STATUS.PENDING) ? 'page__main--index-empty' : ''}`}>
+      <main className={`page__main page__main--index ${(currentOffers.length === 0 && store.getState().offers.requestStatus !== RequestStatus.Pending) ? 'page__main--index-empty' : ''}`}>
         <h1 className="visually-hidden">Cities</h1>
         <Tabs/>
         <div className="cities">
-          {(currentOffers.length === 0 && store.getState().offers.requestStatus !== REQUEST_STATUS.PENDING) ? <EmptyMain city={city.name} /> :
+          {(currentOffers.length === 0 && store.getState().offers.requestStatus !== RequestStatus.Pending) ? <EmptyMain city={city.name} /> :
             <div className="cities__places-container container">
               <section className="cities__places places">
                 {(currentOffers.length === 0) ? <Spinner /> :
@@ -61,7 +66,7 @@ const MainPage = ({city}: MainPageProps) => {
                   </Fragment>}
               </section>
               <div className="cities__right-section">
-                <Map city={city} offers={currentOffers} type={MAP_TYPE_CLASS.CITY} />
+                <Map city={city} offers={currentOffers} type={MapTypeOffer.Cities} />
               </div>
             </div>}
         </div>
@@ -70,12 +75,5 @@ const MainPage = ({city}: MainPageProps) => {
   );
 };
 
-const loader = () => {
-  const {offers} = store.getState();
-  if(offers.requestStatus === REQUEST_STATUS.IDLE || (offers.requestStatus === REQUEST_STATUS.FULFILLED && offers.offers.length === 0)) {
-    store.dispatch(fetchAllOffers());
-  }
-  return null;
 
-};
-export {loader, MainPage};
+export {MainPage};

@@ -1,4 +1,4 @@
-import {APP_ROUTES, AUTHORIZATION_STATUS} from '../../constants/constants.ts';
+import {AppRoute, AuthorizationStatus} from '../../constants/constants.ts';
 import {NavLink} from 'react-router-dom';
 import {store} from '../../store/store.ts';
 import {logout} from '../../store/slices/authentication.ts';
@@ -14,11 +14,11 @@ const HeaderNavigation = () => {
     store.dispatch(logout());
   };
   return (
-    (authentication.status === AUTHORIZATION_STATUS.AUTHORIZED) ? (
+    (authentication.status === AuthorizationStatus.Authorized) ? (
       <nav className="header__nav">
         <ul className="header__nav-list">
           <li className="header__nav-item user">
-            <NavLink to={APP_ROUTES.FAVORITES}
+            <NavLink to={AppRoute.Favorites}
               className="header__nav-link header__nav-link--profile"
             >
               <div className="header__avatar-wrapper user__avatar-wrapper"></div>

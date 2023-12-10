@@ -3,7 +3,7 @@ import {ReviewForm} from '../review-form/review-form.tsx';
 import {Comment} from '../../contracts/contaracts.ts';
 import {formatDate, isPlural} from '../../utils/intl.ts';
 import {useAppSelector} from '../../hooks/store.ts';
-import {AUTHORIZATION_STATUS} from '../../constants/constants.ts';
+import {AuthorizationStatus} from '../../constants/constants.ts';
 
 interface ReviewsListProps {
   comments: Comment[];
@@ -49,7 +49,7 @@ const ReviewsList = ({comments}: ReviewsListProps) => {
           </li>
         ))}
       </ul>
-      {(auth === AUTHORIZATION_STATUS.AUTHORIZED) ? <ReviewForm/> : '' }
+      {(auth === AuthorizationStatus.Authorized) ? <ReviewForm/> : '' }
     </section>
   );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
-import {useDocumentTitle} from '../../hooks/useDocumentTitle.ts';
+import {useDocumentTitle} from '../../hooks/use-document-title.ts';
 import {Offer} from '../../contracts/contaracts.ts';
 import {Card} from '../../components/card/card.tsx';
 import {useAppSelector} from '../../hooks/store.ts';
 import {store} from '../../store/store.ts';
 import {fetchOffer} from '../../store/slices/offers.ts';
-import {EmptyFavorites} from '../../components/empty/empty-favorites.tsx';
+import {EmptyFavorites} from '../../components/empty-favorites/empty-favorites.tsx';
 import {NavLink} from 'react-router-dom';
 
 type GroupedOffers = {[k:string]: Offer[]}

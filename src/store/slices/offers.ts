@@ -1,14 +1,14 @@
 import {createAsyncThunk, createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {DetailedOffer, Offer} from '../../contracts/contaracts.ts';
 import {ThunkApi} from '../store-types.ts';
-import {REQUEST_STATUS, ServerRoutes} from '../../constants/constants.ts';
+import {RequestStatus, ServerRoutes} from '../../constants/constants.ts';
 import {changeFavoriteStatus} from './favorites.ts';
 
 interface OffersState {
   offers: Offer[];
   selectedOffer?: DetailedOffer | null;
   nearOffers: Offer[];
-  requestStatus: REQUEST_STATUS;
+  requestStatus: RequestStatus;
 
 }
 
@@ -16,7 +16,7 @@ const initialState: OffersState = {
   offers: [],
   selectedOffer: null,
   nearOffers:[],
-  requestStatus: REQUEST_STATUS.IDLE,
+  requestStatus: RequestStatus.Idle,
 };
 
 const fetchAllOffers = createAsyncThunk<Offer[], undefined, ThunkApi >(
@@ -53,35 +53,35 @@ const offersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllOffers.fulfilled,(state: OffersState, action: PayloadAction<Offer[]>) => {
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
       state.offers = action.payload;
     });
     builder.addCase(fetchAllOffers.pending,(state: OffersState) => {
-      state.requestStatus = REQUEST_STATUS.PENDING;
+      state.requestStatus = RequestStatus.Pending;
     });
     builder.addCase(fetchAllOffers.rejected,(state: OffersState) => {
-      state.requestStatus = REQUEST_STATUS.REJECTED;
+      state.requestStatus = RequestStatus.Rejected;
     });
     builder.addCase(fetchOffer.fulfilled, (state: OffersState, action: PayloadAction<DetailedOffer>) => {
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
       state.selectedOffer = action.payload;
     });
     builder.addCase(fetchOffer.pending, (state: OffersState) => {
-      state.requestStatus = REQUEST_STATUS.PENDING;
+      state.requestStatus = RequestStatus.Pending;
     });
     builder.addCase(fetchOffer.rejected, (state: OffersState) => {
-      state.requestStatus = REQUEST_STATUS.REJECTED;
+      state.requestStatus = RequestStatus.Rejected;
     });
     builder.addCase(fetchNearOffers.fulfilled, (state, action) => {
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
       state.nearOffers = action.payload;
     });
     builder.addCase(fetchNearOffers.rejected, (state) => {
-      state.requestStatus = REQUEST_STATUS.REJECTED;
+      state.requestStatus = RequestStatus.Rejected;
     });
     builder.addCase(fetchNearOffers.pending, (state) => {
       state.nearOffers = [];
-      state.requestStatus = REQUEST_STATUS.PENDING;
+      state.requestStatus = RequestStatus.Pending;
     });
     builder.addCase(changeFavoriteStatus.fulfilled, (state, action) => {
       const offersElement = state.offers.find((el) => el.id === action.payload.id)!;
@@ -99,7 +99,7 @@ const offersSlice = createSlice({
       if (nearOffersElement) {
         nearOffersElement.isFavorite = action.payload.isFavorite;
       }
-      state.requestStatus = REQUEST_STATUS.FULFILLED;
+      state.requestStatus = RequestStatus.Fulfilled;
     });
   }
 });

@@ -1,4 +1,4 @@
-import {HeaderNavigation} from './navigation.tsx';
+import {HeaderNavigation} from './header-navigation.tsx';
 import {Link} from 'react-router-dom';
 
 
